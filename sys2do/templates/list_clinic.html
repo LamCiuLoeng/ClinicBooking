@@ -1,0 +1,16 @@
+{% extends "master.html" %}
+
+
+{% block content %}
+<div id="content">
+	{% for c in clinics %}
+		<div>
+			<img src="{{c.image_url}}">
+			<h2>{{c.name}}</h2>
+			<p>{{c.desc}}</p>
+			<p><a href="/list_doctor?id={{c.id}}">Check the doctors</a></p>
+		</div>
+	{% endfor %}
+</div>
+		
+{% endblock %}

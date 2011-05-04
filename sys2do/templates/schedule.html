@@ -1,0 +1,99 @@
+{% extends "master.html" %}
+
+{% block extCSS %}
+<style type="text/css">
+	.cal_header{
+		width:100px;
+		height:100px;
+		float:left;
+		margin:0px;
+		padding:0px;
+		background-color:yellow;
+		border-bottom:1px solid #369;
+		border-right:1px solid #369;
+		border-top:1px solid #369;
+	}
+	.cal_box{
+		width:100px;
+		height:100px;
+		float:left;
+		margin:0px;
+		padding:0px;
+		border-bottom:1px solid #369;
+		border-right:1px solid #369;
+	}
+	.cal_disable{
+		background-color:red;
+	}
+	.cal_enable{
+		background-color:green;
+	}
+	.cal_not_this_month{
+		background-color:gray;
+	}
+	.cal_box_selected{
+		background-color:blue;
+	}
+	.cal_box_booked{
+		background-color:brown;
+	}
+</style>
+{% endblock %}
+
+{% block extJS %}
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+	$(document).ready(function(){
+		$(".cal_enable").hover(
+			function (){
+    			$(this).addClass("cal_box_selected");
+			},
+			function(){
+				$(this).removeClass("cal_box_selected");
+			}
+		);
+		
+		$(".cal_enable").click({
+			alert("kkk");
+		});
+	});
+//]]>
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+	<div>
+		<div>
+			<img src="{{doctor_profile.image_url}}"/>
+			<h2>{{doctor_profile['name']}}</h2>
+			<p>{{doctor_profile['desc']}}</p>
+		</div>
+		<div>
+			<h2>{{current.strftime('%Y.%m')}}</h2>
+			<div style="overflow: auto; width: 750px;">
+				{% for h in ['SUN','MON','TUE','WED','THU','FRI','SAT'] %}
+					<div class="cal_header">{{h}}</div>
+				{% endfor %}
+				
+				{% for d in schedule %}
+					{% if not d['this_month'] %}
+						<div class="cal_box cal_not_this_month">{{d['date'].day}}</div>
+					{% else %}
+						{% if not d['avaiable'] %}
+							<div class="cal_box cal_disable">{{d['date'].day}}</div>
+						{% else%}
+							<div class="cal_box cal_enable">{{d['date'].day}}</div>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="clear"><br /></div>
+			<div>
+				<a href="/schedule?id={{doctor_profile['id']}}&y={{pre.year}}&m={{pre.month}}">Previously Month</a>&nbsp;|&nbsp;<a href="/schedule?id={{doctor_profile['id']}}&y={{next.year}}&m={{next.month}}">Next Month</a>
+			</div>
+		</div>
+	</div>
+</div>
+		
+{% endblock %}

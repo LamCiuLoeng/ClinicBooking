@@ -1,0 +1,22 @@
+{% extends "master.html" %}
+
+
+{% block content %}
+<div id="content">
+	<div>
+		<div>
+			<img src=""/>
+		</div>
+		<p></p>
+	</div>
+	{% for d in doctors %}
+		<div>
+			<img src="{{d['image_url']}}"/>
+			<h2>{{d['name']}}</h2>
+			<p>{{d['desc']}}</p>
+			<p><a href="/schedule?id={{d['id']}}">Check the doctor's schedule</a></p>
+		</div>
+	{% endfor %}
+</div>
+		
+{% endblock %}
