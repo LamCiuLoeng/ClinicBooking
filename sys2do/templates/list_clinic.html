@@ -25,11 +25,11 @@
 {% endblock %}
 
 {% block content %}
-<div id="main_content" class="full">
+<div id="main_content" class="full vpad_10">
 	{% for c in clinics %}
-		<div class="fivesixth last top_margin_20 blackborder_dotted vpad_10">
+		<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10">
 			<img src="{{c.image_url}}" class="obj_left" style="margin:10px;">
-			<div id="gmap_div_{{c.id}}" class="obj_right blackborder" style="width:300px;height:200px;margin:10px;"></div>
+			<div id="gmap_div_{{c.id}}" class="obj_right blackborder right_margin_10" style="width:300px;height:200px;"></div>
 			<h2>{{c.name}}</h2>
 			<p>{{c.desc}}</p>
 			<p><a href="/list_doctors_by_clinic?id={{c.id}}">Check the doctors</a></p>

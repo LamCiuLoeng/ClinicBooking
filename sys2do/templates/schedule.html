@@ -59,7 +59,7 @@
 {% endblock %}
 
 {% block content %}
-<div id="main_content" class="full">
+<div id="main_content" class="full vpad_10">
 	
 		<div class="quarter first vpad_10">
 			{% if not doctor_profile.image_url%}
@@ -70,6 +70,8 @@
 			<h2>{{doctor_profile['name']}}</h2>
 			<p>{{doctor_profile['desc']}}</p>
 		</div>
+		
+		
 		<div class="threequarter last vpad_10">
 			<h2 class="text_center">{{current.strftime('%Y.%m')}}</h2>
 			<div style="overflow: auto; width: 650px;">

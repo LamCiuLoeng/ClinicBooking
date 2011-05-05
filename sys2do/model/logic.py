@@ -94,7 +94,7 @@ class DoctorProfile(Abstract):
     required_fields = ['uid']
     default_values = {'create_time':datetime.datetime.now(),
                       'qty' : 10,
-                      'avaiable_day' : range(0, 7),
+                      'avaiable_day' : range(1, 6),
                       'clinic' : []}
 
     validators = {
