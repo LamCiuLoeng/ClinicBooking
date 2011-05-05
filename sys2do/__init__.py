@@ -28,5 +28,7 @@ app.add_url_rule("/logout_handler", view_func = r.logout_handler, methods = ['GE
 
 import views.action as a
 app.add_url_rule("/list_clinic", view_func = a.list_clinic)
-app.add_url_rule("/list_doctor", view_func = a.list_doctor)
+app.add_url_rule("/list_doctors", view_func = a.list_doctors)
+app.add_url_rule("/list_doctors_by_clinic", view_func = a.list_doctors_by_clinic)
 app.add_url_rule("/schedule", view_func = a.schedule)
+app.add_url_rule("/save_events", view_func = a.save_events, methods = ['GET', 'POST'])

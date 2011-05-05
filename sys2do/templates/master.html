@@ -8,6 +8,15 @@
 	
 	<title>{% block title %}Easy Booking{% endblock %}</title>
 	
+	
+	<link href="{{url_for('.static', filename='css/reset.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{url_for('.static', filename='css/grid960.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{url_for('.static', filename='css/type.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{url_for('.static', filename='css/tables.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{url_for('.static', filename='css/forms.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{url_for('.static', filename='css/helpers.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{url_for('.static', filename='css/ux.css')}}" rel="stylesheet" type="text/css" />
+	
 	<link href="{{url_for('.static', filename='css/screen.css')}}" rel="stylesheet" type="text/css" />
 	{% block extCSS %}{% endblock %}
 	
@@ -33,24 +42,34 @@
 </head>
 
 <body>
-	{% block header %}<div id="header"><p style="text-align:right">Welcome, | <a href="/logout_handler">Logout</a></p></div>{% endblock %}
-	
-	{% block menu %}
-		<div id="menu">
-			<ul>
-				<li><a href="/list_clinic">Go Booking</a></li>
-				<li><a href="/my_booking">My Booking</a></li>
-				<li><a href="/my_message">My Message</a></li>
-			</ul>
-		</div>
-	{% endblock %}
-	
-	{% block content %}
-		<div id="body"><!-- Main Content Here --></div>
-	{% endblock %}
-	
-	{% block footer %}
-		<div id="footer"><p style="text-align:right">Powered by E-solutions</p></div>
-	{% endblock %}
+	<div id="container">
+		{% block header %}
+			<div id="header" class="full">
+				<h1 class="obj_left"><a href="/index">Easy Booking</a></h1>
+				<p class="obj_right top_margin_10">Welcome, {{session['user_profile']['name']}}| <a href="/logout_handler">Logout</a></p>
+				<div class="clear"></div>
+			</div>
+		{% endblock %}
+		
+		{% block menu %}
+			<div class="full">
+				<div id="tabs">
+					<ul>
+						<li><a href="/list_clinic"><span>Go Booking</span></a></li>
+						<li><a href="/my_booking"><span>My Booking</span></a></li>
+						<li><a href="/my_message"><span>My Message</span></a></li>
+					</ul>
+				</div>
+			</div>
+		{% endblock %}
+		
+		{% block content %}
+			<div id="body" class="full"><!-- Main Content Here --></div>
+		{% endblock %}
+		
+		{% block footer %}
+			<div id="footer" class="full"><p style="text-align:right">Powered by E-solutions</p></div>
+		{% endblock %}
+	</div>
 </body>
 </html>

@@ -1,48 +1,15 @@
 {% extends "master.html" %}
 
 {% block extCSS %}
-<style type="text/css">
-	.cal_header{
-		width:100px;
-		height:100px;
-		float:left;
-		margin:0px;
-		padding:0px;
-		background-color:yellow;
-		border-bottom:1px solid #369;
-		border-right:1px solid #369;
-		border-top:1px solid #369;
-	}
-	.cal_box{
-		width:100px;
-		height:100px;
-		float:left;
-		margin:0px;
-		padding:0px;
-		border-bottom:1px solid #369;
-		border-right:1px solid #369;
-	}
-	.cal_disable{
-		background-color:red;
-	}
-	.cal_enable{
-		background-color:green;
-	}
-	.cal_not_this_month{
-		background-color:gray;
-	}
-	.cal_box_selected{
-		background-color:blue;
-	}
-	.cal_box_booked{
-		background-color:brown;
-	}
-</style>
+<link href="{{url_for('.static', filename='css/jquery.pnotify.default.css')}}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block extJS %}
+<script src="{{url_for('.static', filename='js/jquery.pnotify.min.js')}}" type="text/javascript"></script>
+
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
+
 	$(document).ready(function(){
 		$(".cal_enable").hover(
 			function (){
@@ -53,8 +20,38 @@
 			}
 		);
 		
-		$(".cal_enable").click({
-			alert("kkk");
+		$(".cal_enable").click(function(event){
+			var div = $(this);
+			var date = $(":hidden",div).val();
+			$.getJSON("/save_events",
+				{
+					"did" : {{doctor_profile['id']}},
+					"uid" : {{session['user_profile']['id']}},
+					"d"   : date
+				},
+				function(r){
+					if(r.success){
+						div.addClass("cal_booked");
+						div.removeClass("cal_enable");
+						div.unbind("click");
+						div.unbind("mouseover");
+						$.pnotify({
+						    //pnotify_title: "Booking successfully!",
+						    pnotify_text: '<div class="success"><p>Your request has submit successfully!</p><div></div></div>',
+						    pnotify_nonblock: true,
+						    pnotify_mouse_reset: false,
+						
+						});
+					}else{
+						$.pnotify({
+						    //pnotify_title: "Booking successfully!",
+						    pnotify_text: '<div class="error"><p>The service is not avaiable now ,please try it later !</p><div></div></div>',
+						    pnotify_nonblock: true,
+						    pnotify_mouse_reset: false,
+						
+						});
+					}
+			});
 		});
 	});
 //]]>
@@ -62,18 +59,22 @@
 {% endblock %}
 
 {% block content %}
-<div id="content">
-	<div>
-		<div>
-			<img src="{{doctor_profile.image_url}}"/>
+<div id="main_content" class="full">
+	
+		<div class="quarter first vpad_10">
+			{% if not doctor_profile.image_url%}
+				<img src="/static/images/no_images.jpg"/>
+			{% else %}
+				<img src="{{doctor_profile.image_url}}"/>
+			{% endif %}
 			<h2>{{doctor_profile['name']}}</h2>
 			<p>{{doctor_profile['desc']}}</p>
 		</div>
-		<div>
-			<h2>{{current.strftime('%Y.%m')}}</h2>
-			<div style="overflow: auto; width: 750px;">
+		<div class="threequarter last vpad_10">
+			<h2 class="text_center">{{current.strftime('%Y.%m')}}</h2>
+			<div style="overflow: auto; width: 650px;">
 				{% for h in ['SUN','MON','TUE','WED','THU','FRI','SAT'] %}
-					<div class="cal_header">{{h}}</div>
+					<div class="cal_header text_center "><b>{{h}}</b></div>
 				{% endfor %}
 				
 				{% for d in schedule %}
@@ -82,18 +83,19 @@
 					{% else %}
 						{% if not d['avaiable'] %}
 							<div class="cal_box cal_disable">{{d['date'].day}}</div>
+						{% elif d['is_booked'] %}
+							<div class="cal_box cal_booked">{{d['date'].day}}</div>
 						{% else%}
-							<div class="cal_box cal_enable">{{d['date'].day}}</div>
+							<div class="cal_box cal_enable">{{d['date'].day}}<input type="hidden" name="date" value="{{d['date'].strftime('%Y%m%d')}}"/></div>
 						{% endif %}
 					{% endif %}
 				{% endfor %}
 			</div>
 			<div class="clear"><br /></div>
-			<div>
+			<div class="pagescontainer">
 				<a href="/schedule?id={{doctor_profile['id']}}&y={{pre.year}}&m={{pre.month}}">Previously Month</a>&nbsp;|&nbsp;<a href="/schedule?id={{doctor_profile['id']}}&y={{next.year}}&m={{next.month}}">Next Month</a>
 			</div>
 		</div>
-	</div>
 </div>
 		
 {% endblock %}

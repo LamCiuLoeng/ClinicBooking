@@ -139,6 +139,7 @@ def init():
     c1.id = c1.getID()
     c1.address = u"C1 Address"
     c1.name = u'Clinic 1'
+    c1.desc = u'This is C1 Clinic.'
     c1.location = (22.396428, 114.1094970)
     c1.save()
 
@@ -146,6 +147,7 @@ def init():
     c2.id = c2.getID()
     c2.address = u"C2 Address"
     c2.name = u'Clinic 2'
+    c2.desc = u'This is C2 Clinic.'
     c2.location = (22.396428, 114.0094970)
     c2.save()
 
@@ -153,6 +155,7 @@ def init():
     c3.id = c3.getID()
     c3.name = u'Clinic 3'
     c3.address = u"C3 Address"
+    c3.desc = u'This is C3 Clinic.'
     c3.location = (22.296428, 114.0094970)
     c3.save()
 
@@ -160,13 +163,15 @@ def init():
     c4.id = c4.getID()
     c4.address = u"C4 Address"
     c4.name = u'Clinic 4'
+    c4.desc = u'This is C4 Clinic.'
     c4.location = (22.286428, 114.1094970)
     c4.save()
 
     c5 = connection.Clinic()
     c5.id = c5.getID()
     c5.name = u'Clinic 5'
-    c1.address = u"C5 Address"
+    c5.address = u"C5 Address"
+    c5.desc = u'This is C5 Clinic.'
     c5.location = (22.284428, 114.1094970)
     c5.save()
 

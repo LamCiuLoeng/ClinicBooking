@@ -27,7 +27,7 @@ def login_handler():
         return redirect("/login")
     else:
         session['login'] = True
-        session['user_profile'] = {'name' : str(u)}
+        session['user_profile'] = u.populate()
         return redirect("/index")
 
 def logout_handler():
