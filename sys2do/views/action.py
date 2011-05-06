@@ -6,12 +6,13 @@ Created on 2011-5-4
 '''
 from datetime import datetime as dt, timedelta
 import calendar, traceback
-
+from webhelpers.paginate import Page
+import pymongo
 from flask import g, render_template, flash, session, redirect, url_for, request
 from flask import current_app as app
-from sys2do.model import connection
 from flask.helpers import jsonify
 
+from sys2do.model import connection
 
 def list_clinic():
     cs = list(connection.Clinic.find({'active':0}).sort('name'))
@@ -128,9 +129,9 @@ def save_events():
         doctor = connection.DoctorProfile.one({'id':int(did)}).populate()
         m = connection.Message()
         m.id = m.getID()
-        m.title = u'Booking request submit'
+        m.subject = u'Booking request submit'
         m.uid = session['user_profile']['id']
-        m.contnet = u'%s make a booking with doctor %s on %s' % (session['user_profile']['name'], doctor['name'], d)
+        m.content = u'%s make a booking with doctor %s on %s' % (session['user_profile']['name'], doctor['name'], d)
         m.save()
 
         return jsonify({
@@ -143,3 +144,28 @@ def save_events():
                         "success" : False,
                         "message" : "Error occur when submiting the request !"
                         })
+
+
+
+def my_booking():
+    try:
+        page = request.values.get("page", 1)
+    except:
+        page = 1
+    id = session['user_profile']['id']
+
+    events = list(connection.Events.find({'active':0, 'uid':id}).sort("date"))
+    paginate_events = Page(events, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("my_booking"), page))
+    return render_template("/my_booking.html", events = paginate_events)
+
+
+def my_message():
+    try:
+        page = request.values.get("page", 1)
+    except:
+        page = 1
+    id = session['user_profile']['id']
+
+    msgs = list(connection.Message.find({'active':0, 'uid':id}).sort("create_time", pymongo.DESCENDING))
+    paginate_msgs = Page(msgs, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("my_message"), page))
+    return render_template("/my_message.html", messages = paginate_msgs)

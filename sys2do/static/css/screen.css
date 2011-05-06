@@ -1,3 +1,35 @@
+body{
+	background-color: #152652;
+    background-image: url("/static/images/login_01.jpg");
+    background-repeat: repeat-x;
+    margin: 0;
+}	
+.outter{
+	border : 1px solid gray;
+	overflow : auto;
+	background-color: #fff;
+}
+
+.height_600{
+	height: auto !important;
+	min-height : 600px;
+	height:600px;
+}
+
+.height_500{
+	height: auto !important;
+	min-height : 500px;
+	height:500px;
+}
+
+.height_400{
+	height: auto !important;
+	min-height : 400px;
+	height:400px;
+}
+
+
+
 /*- Menu Tabs--------------------------- */
 #tabs {
   float:left;
@@ -10,7 +42,7 @@
 
 #tabs ul {
     margin:0;
-    padding:10px 10px 0 20px;
+    padding:10px 10px 0 10px;
     list-style:none;
 }
 

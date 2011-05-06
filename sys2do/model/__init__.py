@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import datetime, traceback
-import pymongo
+#import pymongo
 from mongokit import Connection, Document
-
+from flask import current_app as app
 # configuration
 MONGODB_HOST = 'localhost'
 MONGODB_PORT = 9999
@@ -25,7 +25,7 @@ def _getID(collection):
             index, c.next = c.next, c.next + 1
             return index
         except:
-            traceback.print_exc()
+            app.logger.error(traceback.format_exc())
             return None
     return f
 
@@ -77,13 +77,37 @@ class Abstract(Document):
         c.save()
         return index
 
-
     default_values = {
-#                      'id' : connection.Sequence.find_and_modify({'name':__collection__}, {'$inc':{'next':1}})['next'],
-#                      'id' : getID(),
                       'active' : 0,
                       'create_time':datetime.datetime.now,
                       }
+
+
+
+
+@connection.register
+class SystemLog(Abstract):
+    __collection__ = 'SYSTEMLOG'
+    structure = {
+        'id': int,
+        'uid': int,
+        'type' : unicode,
+        'content':unicode,
+    }
+
+    equired_fields = ['uid', 'type']
+    default_values = {
+                      'create_time':datetime.datetime.now(),
+                     }
+
+    validators = {
+
+    }
+    use_dot_notation = True
+    use_autorefs = True
+    def __repr__(self):
+        return self.type
+
 
 
 from auth import *

@@ -12,12 +12,16 @@
 				minZoom:10,
                 maxZoom:18
 			})
-			var marker_{{c.id}} = new google.maps.Marker({
-		        position: new google.maps.LatLng({{c.location[0]}},{{c.location[1]}}),
-		        title: "{{c.name}}",
-		        map:map_{{c.id}}
-		      });
-		    map_{{c.id}}.setCenter(marker_{{c.id}}.getPosition());
+			{% if c.location[0] and c.location[1]%}
+				var marker_{{c.id}} = new google.maps.Marker({
+			        position: new google.maps.LatLng({{c.location[0]}},{{c.location[1]}}),
+			        title: "{{c.name}}",
+			        map:map_{{c.id}}
+			      });
+			    map_{{c.id}}.setCenter(marker_{{c.id}}.getPosition());
+		    {% else %}
+		    	map_{{c.id}}.setCenter(new google.maps.LatLng(22.296428, 114.0094970));
+		    {% endif %}
 		{% endfor %}
 	});
 //]]>
@@ -25,7 +29,7 @@
 {% endblock %}
 
 {% block content %}
-<div id="main_content" class="full vpad_10">
+
 	{% for c in clinics %}
 		<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10">
 			<img src="{{c.image_url}}" class="obj_left" style="margin:10px;">
@@ -35,6 +39,6 @@
 			<p><a href="/list_doctors_by_clinic?id={{c.id}}">Check the doctors</a></p>
 		</div>
 	{% endfor %}
-</div>
+
 		
 {% endblock %}

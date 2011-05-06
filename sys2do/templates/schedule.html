@@ -1,12 +1,6 @@
 {% extends "master.html" %}
 
-{% block extCSS %}
-<link href="{{url_for('.static', filename='css/jquery.pnotify.default.css')}}" rel="stylesheet" type="text/css" />
-{% endblock %}
-
 {% block extJS %}
-<script src="{{url_for('.static', filename='js/jquery.pnotify.min.js')}}" type="text/javascript"></script>
-
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 
@@ -37,17 +31,17 @@
 						div.unbind("mouseover");
 						$.pnotify({
 						    //pnotify_title: "Booking successfully!",
-						    pnotify_text: '<div class="success"><p>Your request has submit successfully!</p><div></div></div>',
+						    pnotify_text: '<div class="success"><p>Your request has submit successfully!</p></div>',
 						    pnotify_nonblock: true,
-						    pnotify_mouse_reset: false,
+						    pnotify_mouse_reset: false
 						
 						});
 					}else{
 						$.pnotify({
 						    //pnotify_title: "Booking successfully!",
-						    pnotify_text: '<div class="error"><p>The service is not avaiable now ,please try it later !</p><div></div></div>',
+						    pnotify_text: '<div class="error"><p>The service is not avaiable now ,please try it later !</p></div>',
 						    pnotify_nonblock: true,
-						    pnotify_mouse_reset: false,
+						    pnotify_mouse_reset: false
 						
 						});
 					}
@@ -59,8 +53,6 @@
 {% endblock %}
 
 {% block content %}
-<div id="main_content" class="full vpad_10">
-	
 		<div class="quarter first vpad_10">
 			{% if not doctor_profile.image_url%}
 				<img src="/static/images/no_images.jpg"/>
@@ -98,6 +90,5 @@
 				<a href="/schedule?id={{doctor_profile['id']}}&y={{pre.year}}&m={{pre.month}}">Previously Month</a>&nbsp;|&nbsp;<a href="/schedule?id={{doctor_profile['id']}}&y={{next.year}}&m={{next.month}}">Next Month</a>
 			</div>
 		</div>
-</div>
 		
 {% endblock %}

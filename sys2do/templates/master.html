@@ -17,32 +17,43 @@
 	<link href="{{url_for('.static', filename='css/helpers.css')}}" rel="stylesheet" type="text/css" />
 	<link href="{{url_for('.static', filename='css/ux.css')}}" rel="stylesheet" type="text/css" />
 	
+	<link href="{{url_for('.static', filename='css/jquery.pnotify.default.css')}}" rel="stylesheet" type="text/css" />
+	
 	<link href="{{url_for('.static', filename='css/screen.css')}}" rel="stylesheet" type="text/css" />
 	{% block extCSS %}{% endblock %}
 	
 		
 	<script src="{{url_for('.static', filename='js/jquery-1.6.min.js')}}" type="text/javascript"></script>
-	
-	{% with messages = get_flashed_messages() %}
-		{% if messages %}
-			<script language="JavaScript" type="text/javascript">
-		    //<![CDATA[
-		    	var msg = [];
-				{% for message in messages %}
-					msg.push('{{ message }}');
-				{% endfor %}
-				if(msg.length>0){ alert(msg.join("\n"); }
-		    //]]>
-		   </script>
-		{% endif %}    
-    {% endwith %}     
+	<script src="{{url_for('.static', filename='js/jquery.pnotify.min.js')}}" type="text/javascript"></script>
+
+	<script language="JavaScript" type="text/javascript">
+    //<![CDATA[
+    	$(document).ready(function(){
+			{% for category,message in get_flashed_messages(with_categories=true) %}					
+				{% if category == 'INFO' %}					
+					var content = '<div class="success"><p>{{message}}</p></div>';
+				{% elif category == 'ERROR' %}
+					var content = '<div class="error"><p>{{message}}</p></div>';
+				{% else %}
+					var content = '<div class="warning"><p>{{message}}</p></div>';
+				{% endif %}
+				$.pnotify({
+					    pnotify_text: content,
+					    pnotify_nonblock: true,
+					    pnotify_mouse_reset: false
+					});
+			{% endfor %}
+		});
+    //]]>
+   </script>
+
 	
 	
 	{% block extJS %}{% endblock %}
 </head>
 
 <body>
-	<div id="container">
+	<div id="container" class="outter round_10">
 		{% block header %}
 			<div id="header" class="full">
 				<h1 class="obj_left"><a href="/index">Easy Booking</a></h1>
@@ -50,30 +61,34 @@
 				<div class="clear"></div>
 			</div>
 		{% endblock %}
-		
+
 		{% block menu %}
 			<div class="full">
 				<div id="tabs">
 					<ul>
-						<li><a href="/list_clinic"><span>Go Booking</span></a></li>
-						<li><a href="/my_booking"><span>My Booking</span></a></li>
-						<li><a href="/my_message"><span>My Message</span></a></li>
+						<li id="{{'current' if current_tab == 't1' or current_tab is undefined else ''}}"><a href="{{url_for('list_clinic')}}"><span>Go Booking</span></a></li>
+						<li id="{{'current' if current_tab == 't2' else ''}}"><a href="{{url_for('my_booking')}}"><span>My Booking</span></a></li>
+						<li id="{{'current' if current_tab == 't3' else ''}}"><a href="{{url_for('my_message')}}"><span>Message</span></a></li>
+						<li id="{{'current' if current_tab == 't4' else ''}}"><a href="{{url_for('m_clinic_list')}}"><span>Clinic</span></a></li>
+						<li id="{{'current' if current_tab == 't5' else ''}}"><a href="{{url_for('m_doctor_list')}}"><span>Doctor</span></a></li>
+						<li id="{{'current' if current_tab == 't6' else ''}}"><a href="{{url_for('m_nurse_list')}}"><span>Nurse</span></a></li>
+						<li id="{{'current' if current_tab == 't7' else ''}}"><a href="{{url_for('m_user_list')}}"><span>User</span></a></li>
 					</ul>
-					<div class="right_margin_10 obj_right">
-						<form action="/" method="post">
-							<input type="text" name="q" />&nbsp;&nbsp;<input type="submit" value="Search"/>
-						</form>
-					</div>
+					<div class="right_margin_10 obj_right"><input type="text" name="q" /></div>
 				</div>
 			</div>
 		{% endblock %}
 		
-		{% block content %}
-			<div id="body" class="full"><!-- Main Content Here --></div>
+		{% block main %}
+			<div id="main_content" class="full vpad_10 height_500">
+				{% block content %}
+				<!-- Main Content Here -->
+				{% endblock %}
+			</div>
 		{% endblock %}
 		
 		{% block footer %}
-			<div id="footer" class="full"><p style="text-align:right">Powered by E-solutions</p></div>
+			<div id="footer" class="full bg_lightblue bottom_margin_10"><p style="text-align:right">Powered by E-solutions</p></div>
 		{% endblock %}
 	</div>
 </body>

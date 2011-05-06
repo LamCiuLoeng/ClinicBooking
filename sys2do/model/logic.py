@@ -7,7 +7,7 @@ import datetime
 from mongokit import Document
 from sys2do.model import connection, Abstract
 
-__all__ = ['Clinic', 'Category', 'DoctorProfile', 'NurseProfile', 'Events', 'Message']
+__all__ = ['Clinic', 'Category', 'DoctorProfile', 'NurseProfile', 'Events', 'Message', ]
 
 @connection.register
 class Clinic(Abstract):
@@ -24,6 +24,7 @@ class Clinic(Abstract):
         'doctors':[int],
         'nurse':[int],
         'category':[int],
+        'admin' : [int]
     }
 
     required_fields = ['name']
@@ -172,14 +173,19 @@ class Message(Abstract):
     structure = {
         'id': int,
         'uid': int,
-        'title':unicode,
+        'subject':unicode,
         'content':unicode,
-        'date' : unicode,
+        'type' : unicode,
+        'time' : datetime.datetime,
         'status' : unicode,
     }
 
-    equired_fields = ['uid', 'start', 'end']
-    default_values = {'create_time':datetime.datetime.now()}
+    equired_fields = ['uid', 'title']
+    default_values = {
+                      'create_time':datetime.datetime.now(),
+                      'type' : u'NORMAL',
+                      'time':datetime.datetime.now(),
+                     }
 
     validators = {
 
@@ -187,4 +193,6 @@ class Message(Abstract):
     use_dot_notation = True
     use_autorefs = True
     def __repr__(self):
-        return self.title
+        return self.subject
+
+
