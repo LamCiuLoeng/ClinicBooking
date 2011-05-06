@@ -40,7 +40,7 @@
 			 $("#lng").val(event.latLng.lng());
 		});
 		
-		$("form").submit(){
+		$("form").submit(function(){
 			var msg = [];
 			if(!$("#name").val()){
 				msg.push("Please fill in the clinic name !");
@@ -58,7 +58,7 @@
 					});
 				return false;			
 			}
-		}
+		});
 		
 	});
 //]]>
