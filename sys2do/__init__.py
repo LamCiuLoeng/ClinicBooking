@@ -40,6 +40,8 @@ app.add_url_rule("/m_clinic", view_func = m.m_clinic_list)
 app.add_url_rule("/m_clinic_update", view_func = m.m_clinic_update)
 app.add_url_rule("/m_clinic_save", view_func = m.m_clinic_save, methods = ['POST'])
 app.add_url_rule("/m_doctor", view_func = m.m_doctor_list)
+app.add_url_rule("/m_doctor_update", view_func = m.m_doctor_update)
+app.add_url_rule("/m_doctor_save", view_func = m.m_doctor_save, methods = ['POST'])
 app.add_url_rule("/m_nurse", view_func = m.m_nurse_list)
 app.add_url_rule("/m_user", view_func = m.m_user_list)
 
