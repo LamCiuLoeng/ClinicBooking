@@ -1,6 +1,6 @@
 {% extends "master.html" %}
 
-{% set current_tab = "t4" %}
+{% set current_tab = "t6" %}
 
 {% block extJS %}
 <script language="JavaScript" type="text/javascript">
@@ -10,7 +10,7 @@
 		$("form").submit(function(){
 			var msg = [];
 			if(!$("#email").val()){
-				msg.push("Please fill in the doctor's' email! It would be the login name for the user !");
+				msg.push("Please fill in the nurse's' email! It would be the login name for the user !");
 			}
 			if(!$("#password").val()){
 				msg.push("Please fill in the password!");
@@ -49,43 +49,31 @@
 {% endblock %}
 
 {% block content %}
-<form action="/m_doctor_save" method="post" enctype="multipart/form-data">
-	<input type="hidden" name="action_type" value="NEW"/>
-
-	
+<form action="/m_nurse_save" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="action_type" value="UPDATE"/>
+	<input type="hidden" name="id" value="{{nurse.id}}"/>
+	{% set profile = nurse.getUserProfile() %}
 	<ul>
-		<li><label for="email">E-mail</label><input type="text" name="email" id="email"/></li>
+		<li><label for="email">E-mail</label><input type="text" name="email" id="email" value="{{profile.email}}"/></li>
 		<li><label for="password">Password</label><input type="password" name="password" id="password"/></li>
 		<li><label for="repassword">Confirmed Password</label><input type="password" name="repassword" id="repassword"/></li>
-		<li><label for="first_name">First Name</label><input type="text" name="first_name" id="first_name"/></li>
-		<li><label for="last_name">Last Name</label><input type="text" name="last_name" id="last_name"/></li>
-		<li><label for="phone">Phone</label><input type="text" name="phone" id="phone"/></li>
+		<li><label for="first_name">First Name</label><input type="text" name="first_name" id="first_name" value="{{profile.first_name}}"/></li>
+		<li><label for="last_name">Last Name</label><input type="text" name="last_name" id="last_name" value="{{profile.last_name}}"/></li>
+		<li><label for="phone">Phone</label><input type="text" name="phone" id="phone" value="{{profile.phone}}"/></li>
 		<li><label for="image_url">Image</label><input type="file" name="image_url"/></li>
 		<li>
 			<label for="clinic">Belong to Clinic</label>
 			<select name="clinic" multiple="true">
 				{% for c in clinics %}
-					<option value="{{c.id}}">{{c.name}}</option>
+					{%if c.id in nurse.clinic %}
+						<option value="{{c.id}}" selected="true">{{c.name}}</option>
+					{% else %}
+						<option value="{{c.id}}">{{c.name}}</option>
+					{% endif%}
 				{% endfor %}
 			</select>
 		</li>	
-		<li>
-			<label>Avaiable Days</label>
-			{% for i in ['MON','TUE','WED','THU','FRI','SAT','SUN']%}
-				<input type="checkbox" name="avaiable_day" value="{{loop.index}}"/>&nbsp;{{i}}
-			{% endfor %}
-		</li>
-		<li><label for="qty">Schedule</label>Book <input type="text" name="qty" id="qty" value="10"/> persons per day</li>
-		<li>
-			<label for="category">Category</label>
-			<select name="category" multiple="true">
-				{% for c in categories%}
-					<option value="{{c.id}}">{{c.name}}</option>
-				{% endfor %}
-			</select>
-		</li>
-		<li><label for="desc">Description</label><textarea name="desc" id="desc"></textarea></li>
-		
+		<li><label for="desc">Description</label><textarea name="desc" id="desc">{{nurse.desc}}</textarea></li>	
 	</ul>
 	<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
 </form>

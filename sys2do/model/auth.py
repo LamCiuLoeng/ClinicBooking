@@ -3,7 +3,7 @@ Created on 2011-4-21
 
 @author: cl.lam
 '''
-import datetime
+import datetime, traceback
 from mongokit import Document
 
 from sys2do.model import connection, Abstract, MONGODB_DB
@@ -27,7 +27,7 @@ class User(Abstract):
         'last_name': unicode,
         'phone': unicode,
         'birthday': unicode,
-        'image_url':unicode,
+        'image_url':int,
         'roles':[int],
     }
 
@@ -52,6 +52,14 @@ class User(Abstract):
                 'phone' : self.phone,
                 'name' : str(self)
                 }
+
+    def getImage(self):
+        try:
+            return connection.UploadFile.one({"id" : self.image_url})
+        except:
+            app.logger.error(traceback.format_exc())
+            return None
+
 
 
 @connection.register

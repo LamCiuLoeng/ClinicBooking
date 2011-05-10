@@ -3,8 +3,9 @@ Created on 2011-4-21
 
 @author: cl.lam
 '''
-import datetime
+import datetime, traceback
 from mongokit import Document
+from flask import current_app as app
 from sys2do.model import connection, Abstract
 
 __all__ = ['Clinic', 'Category', 'DoctorProfile', 'NurseProfile', 'Events', 'Message', ]
@@ -19,10 +20,10 @@ class Clinic(Abstract):
         'district':unicode,
         'street':unicode,
         'website' : unicode,
-        'image_url' : unicode,
+        'image_url' : int,
         'desc':unicode,
         'doctors':[int],
-        'nurse':[int],
+        'nurses':[int],
         'category':[int],
         'admin' : [int]
     }
@@ -30,7 +31,7 @@ class Clinic(Abstract):
     required_fields = ['name']
     default_values = {'create_time':datetime.datetime.now(),
                       'doctors' : [],
-                      'nurse' : [],
+                      'nurses' : [],
                       'category' : []}
 
     validators = {
@@ -48,6 +49,12 @@ class Clinic(Abstract):
                 'desc' : self.desc,
                 }
 
+    def getImage(self):
+        try:
+            return connection.UploadFile.one({"id" : self.image_url})
+        except:
+            app.logger.error(traceback.format_exc())
+            return None
 
 
 @connection.register
@@ -119,6 +126,8 @@ class DoctorProfile(Abstract):
         user_info.update(doctor_info)
         return user_info
 
+    def getUserProfile(self):
+        return connection.User.one({"id" : self.uid})
 
 @connection.register
 class NurseProfile(Abstract):
@@ -141,7 +150,8 @@ class NurseProfile(Abstract):
     def __repr__(self):
         return self.name
 
-
+    def getUserProfile(self):
+        return connection.User.one({"id" : self.uid})
 
 @connection.register
 class Events(Abstract):

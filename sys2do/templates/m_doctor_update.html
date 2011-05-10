@@ -50,7 +50,7 @@
 
 {% block content %}
 <form action="/m_doctor_save" method="post" enctype="multipart/form-data">
-	<input type="hidden" name="type" value="UPDATE"/>
+	<input type="hidden" name="action_type" value="UPDATE"/>
 	<input type="hidden" name="id" value="{{doctor.id}}"/>
 	{% set info = doctor.populate() %}
 	<ul>
@@ -66,7 +66,7 @@
 			<select name="clinic" multiple="true">
 				{% for c in clinics %}
 					{%if c.id in doctor.clinic %}
-						<option value="{{c.id}}" checked="true">{{c.name}}</option>
+						<option value="{{c.id}}" selected="true">{{c.name}}</option>
 					{% else %}
 						<option value="{{c.id}}">{{c.name}}</option>
 					{% endif%}
@@ -89,7 +89,7 @@
 			<select name="category" multiple="true">
 				{% for c in categories%}
 					{% if c.id in doctor.category %}
-						<option value="{{c.id}}" checked="true">{{c.name}}</option>
+						<option value="{{c.id}}" selected="true">{{c.name}}</option>
 					{% else %}
 						<option value="{{c.id}}">{{c.name}}</option>
 					{% endif %}

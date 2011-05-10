@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<p class="text_right"><a href="/m_doctor_update?type=n">Add New Doctor</a></p>
+<p class="text_right"><a href="/m_doctor_update?action_type=n">Add New Doctor</a></p>
 
 <table class="datalist" width="100%">
 <thead>
@@ -17,7 +17,7 @@
 	{% for c in paginate_docotrs.items%}
 		{% set info = c.populate() %}
 	<tr>
-        <th scope="row"><a href="/m_doctor_update?id={{c.id}}&type=m"><b>{{info['name']}}</b></a></th>
+        <th scope="row"><a href="/m_doctor_update?id={{c.id}}&action_type=m"><b>{{info['name']}}</b></a></th>
         <td>{{c.clinic}}</td>
 	</tr>
 	{% endfor %}

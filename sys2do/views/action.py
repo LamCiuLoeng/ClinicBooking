@@ -38,7 +38,7 @@ def list_doctors_by_clinic():
         return redirect(url_for("index"))
     else:
         c = connection.Clinic.one({'active':0, 'id':int(id)})
-        data = [connection.DoctorProfile.one({'id':i}).populate() for i in c.doctors]
+        data = [connection.DoctorProfile.one({'id':i})for i in c.doctors]
 
     return render_template("list_doctors_by_clinic.html", doctors = data, clinic = c)
 
@@ -49,8 +49,7 @@ def schedule():
         flash("No doctor id is supplied!", "WARNING")
         return redirect("/index")
 
-    dp = connection.DoctorProfile.one({'id':int(id)}).populate()
-    app.logger.debug(dp)
+    dp = connection.DoctorProfile.one({'id':int(id)})
     year = int(request.values.get("y", dt.now().year))
     month = int(request.values.get("m", dt.now().month))
     current = dt(year, month, 15)
@@ -68,10 +67,6 @@ def schedule():
             events[b.date].append(b)
         else:
             events[b.date] = [b]
-    app.logger.debug(events)
-
-
-    app.logger.debug(session['user_profile']['id'])
 
     s = []
     for d in calendar.Calendar().itermonthdates(year, month):
@@ -93,17 +88,17 @@ def schedule():
                 info['is_booked'] = False
 
 
-            if len(info['events']) >= dp['qty']:
+            if len(info['events']) >= dp.qty:
                 info['avaiable'] = False
-                if len(info['events']) == dp['qty'] : info['full'] = True
-            elif d.weekday() not in dp['avaiable_day']:
+                if len(info['events']) == dp.qty : info['full'] = True
+            elif d.weekday() not in dp.avaiable_day:
                 info['avaiable'] = False
             elif d < dt.today().date():
                 info['avaiable'] = False
             else:
                 info['avaiable'] = True
         s.append(info)
-    return render_template("/schedule.html", schedule = s, doctor_profile = dp, current = current, pre = pre, next = next)
+    return render_template("/schedule.html", schedule = s, doctor = dp, current = current, pre = pre, next = next)
 
 
 

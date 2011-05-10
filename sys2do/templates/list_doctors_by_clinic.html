@@ -33,14 +33,15 @@
 	</div>
 	{% for d in doctors %}
 		<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10">
-			{% if not d['image_url'] %}
+			{% set profile = d.getUserProfile() %}
+			{% if not profile.image_url %}
 				<img src="/static/images/no_images.jpg" class="obj_left left_margin_10"/>
 			{% else %}
-				<img src="{{d['image_url']}}" class="obj_left left_margin_"/>
+				<img src="{{profile.getImage().url}}" class="obj_left left_margin_10"/>
 			{% endif %}
 			<h3>{{d['name']}}</h3>
 			<p>{{d['desc']}}</p>
-			<p><a href="/schedule?id={{d['id']}}">Check the doctor's schedule</a></p>
+			<p><a href="/schedule?id={{d.id}}">Check the doctor's schedule</a></p>
 		</div>
 	{% endfor %}	
 {% endblock %}

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime as dt
 
-from sys2do.model import connection, MONGODB_DB, Sequence
+from sys2do.model import connection, MONGODB_DB, Sequence, UploadFile, SystemLog
 import sys2do.model.auth as auth
 import sys2do.model.logic as logic
 
 def init():
     db = getattr(connection, MONGODB_DB)
-    objects = [Sequence]
+    objects = [Sequence, UploadFile, SystemLog]
     objects.extend([getattr(auth, name) for name in auth.__all__])
     objects.extend([getattr(logic, name) for name in logic.__all__])
 

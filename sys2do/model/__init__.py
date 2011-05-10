@@ -8,7 +8,7 @@ MONGODB_HOST = 'localhost'
 MONGODB_PORT = 9999
 MONGODB_DB = 'CLINIC'
 
-__all__ = ['connection', 'Abstract', 'MONGODB_DB']
+__all__ = ['connection', 'Abstract', 'UploadFile', 'SystemLog', 'MONGODB_DB']
 
 
 # connect to the database
@@ -108,6 +108,31 @@ class SystemLog(Abstract):
     def __repr__(self):
         return self.type
 
+
+@connection.register
+class UploadFile(Abstract):
+    __collection__ = 'UPLOADFILE'
+    structure = {
+        'id': int,
+        'uid': int,
+        'name' : unicode,
+        'path':unicode,
+        'url':unicode,
+        'remark':unicode,
+    }
+
+    equired_fields = ['uid', 'name', 'path']
+    default_values = {
+                      'create_time':datetime.datetime.now(),
+                     }
+
+    validators = {
+
+    }
+    use_dot_notation = True
+    use_autorefs = True
+    def __repr__(self):
+        return self.name
 
 
 from auth import *

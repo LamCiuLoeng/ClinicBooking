@@ -22,6 +22,7 @@ for error_code in [403, 404, 500] : app.error_handlers[error_code] = s.error_pag
 import views.root as r
 app.add_url_rule("/", view_func = r.index)
 app.add_url_rule("/index", view_func = r.index)
+app.add_url_rule("/search", view_func = r.search)
 app.add_url_rule("/login", view_func = r.login)
 app.add_url_rule("/login_handler", view_func = r.login_handler, methods = ['GET', 'POST'])
 app.add_url_rule("/logout_handler", view_func = r.logout_handler, methods = ['GET', 'POST'])
@@ -43,6 +44,8 @@ app.add_url_rule("/m_doctor", view_func = m.m_doctor_list)
 app.add_url_rule("/m_doctor_update", view_func = m.m_doctor_update)
 app.add_url_rule("/m_doctor_save", view_func = m.m_doctor_save, methods = ['POST'])
 app.add_url_rule("/m_nurse", view_func = m.m_nurse_list)
+app.add_url_rule("/m_nurse_update", view_func = m.m_nurse_update)
+app.add_url_rule("/m_nurse_save", view_func = m.m_nurse_save, methods = ['POST'])
 app.add_url_rule("/m_user", view_func = m.m_user_list)
 
 
