@@ -4,19 +4,24 @@ from flask import g, render_template, flash, session, redirect, url_for, request
 from sys2do import app
 from sys2do.model import connection
 from flask.helpers import jsonify
+from sys2do.util.decorator import templated
 
+
+@templated("index.html")
 def index():
     if 'login' not in session or not session['login']:
         return redirect(url_for('login'))
     user_profile = session['user_profile']
     app.logger.debug('A value for debugging')
-    return render_template("index.html", user_profile = user_profile)
+    return {"user_profile" : user_profile}
 
 
+
+@templated("login.html")
 def login():
     if session.get('login', None):
         return redirect("/index")
-    return render_template("login.html")
+    return {}
 
 
 def login_handler():
@@ -52,3 +57,12 @@ def search():
     data = [u.populate() for u in us]
     app.logger.info(data)
     return jsonify(data)
+
+
+
+
+@app.before_request
+def check_auth():
+#    if not session.get('login', None): return redirect(url_for("login"))
+    pass
+

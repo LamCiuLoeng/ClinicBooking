@@ -13,12 +13,16 @@ from flask import current_app as app
 from flask.helpers import jsonify
 
 from sys2do.model import connection
+from sys2do.util.decorator import templated
 
+
+@templated("list_clinic.html")
 def list_clinic():
     cs = list(connection.Clinic.find({'active':0}).sort('name'))
-    return render_template("list_clinic.html", clinics = cs)
+    return {"clinics" :cs}
 
 
+@templated("list_doctors.html")
 def list_doctors():
     id = request.values.get("id", None)
     if not id:
@@ -27,8 +31,8 @@ def list_doctors():
     else:
         c = connection.Clinic.one({'active':0, 'id':int(id)})
         data = [connection.DoctorProfile.one({'id':i}).populate() for i in c.doctors]
+    return {"doctors" : data}
 
-    return render_template("list_doctors.html", doctors = data)
 
 
 def list_doctors_by_clinic():
