@@ -6,8 +6,9 @@ from flask import Flask, Module
 __all__ = ["app"]
 
 app = Flask(__name__, static_path = '/static')
-app.debug = True
-app.secret_key = 'K\x11\xadt\x1e\xb5k(zJ\xa7}\xa6\xda\xb2.\xecb\x81p\xbbU\xa2\xcf'
+app.config.from_object("sys2do.setting")
+#app.debug = True
+#app.secret_key = 'K\x11\xadt\x1e\xb5k(zJ\xa7}\xa6\xda\xb2.\xecb\x81p\xbbU\xa2\xcf'
 
 #===============================================================================
 # sys.py
