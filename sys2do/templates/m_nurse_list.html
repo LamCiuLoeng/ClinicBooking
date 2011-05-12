@@ -17,7 +17,11 @@
 	{% for c in paginate_nurses.items%}
 	<tr>
         <th scope="row"><a href="/m_nurse_update?id={{c.id}}&action_type=m"><b>{{c.getUserProfile()}}</b></a></th>
-        <td>{{c.clinic}}</td>
+        <td>
+			{% for cid in c.clinic %}
+        		{{cid|getByID("Clinic","name")}}&nbsp;
+        	{% endfor %}
+		</td>
 	</tr>
 	{% endfor %}
 </tbody>

@@ -13,15 +13,17 @@ from flask import current_app as app
 from flask.helpers import jsonify
 
 from sys2do.model import connection
-from sys2do.util.decorator import templated
+from sys2do.util.decorator import templated, login_required
 
 
+@login_required
 @templated("list_clinic.html")
 def list_clinic():
     cs = list(connection.Clinic.find({'active':0}).sort('name'))
     return {"clinics" :cs}
 
 
+@login_required
 @templated("list_doctors.html")
 def list_doctors():
     id = request.values.get("id", None)
@@ -34,7 +36,7 @@ def list_doctors():
     return {"doctors" : data}
 
 
-
+@login_required
 def list_doctors_by_clinic():
     id = request.values.get("id", None)
     if not id:
@@ -47,6 +49,7 @@ def list_doctors_by_clinic():
     return render_template("list_doctors_by_clinic.html", doctors = data, clinic = c)
 
 
+@login_required
 def schedule():
     id = request.values.get("id", None)
     if not id :
@@ -106,6 +109,7 @@ def schedule():
 
 
 
+@login_required
 def save_events():
     uid = request.values.get("uid", None)
     did = request.values.get("did", None)
@@ -145,7 +149,7 @@ def save_events():
                         })
 
 
-
+@login_required
 def my_booking():
     try:
         page = request.values.get("page", 1)
@@ -158,6 +162,8 @@ def my_booking():
     return render_template("/my_booking.html", events = paginate_events)
 
 
+
+@login_required
 def my_message():
     try:
         page = request.values.get("page", 1)

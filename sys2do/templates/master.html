@@ -51,19 +51,18 @@
     				});
     			}
     		});
+    		
     	
-			{% for category,message in get_flashed_messages(with_categories=true) %}					
-				{% if category == 'INFO' %}					
-					var content = '<div class="success"><p>{{message}}</p></div>';
-				{% elif category == 'ERROR' %}
-					var content = '<div class="error"><p>{{message}}</p></div>';
-				{% else %}
-					var content = '<div class="warning"><p>{{message}}</p></div>';
-				{% endif %}
+			{% for category,message in get_flashed_messages(with_categories=true) %}								
 				$.pnotify({
-					    pnotify_text: content,
+					    pnotify_text: '{{message}}',
 					    pnotify_nonblock: true,
-					    pnotify_mouse_reset: false
+					    pnotify_mouse_reset: false,
+					    pnotify_opacity: .8,
+						{% if category == 'ERROR' %}
+							pnotify_type: 'error',	
+						{% endif %}
+					    pnotify_animation: 'show'
 					});
 			{% endfor %}
 		});
@@ -80,7 +79,7 @@
 		{% block header %}
 			<div id="header" class="full">
 				<h1 class="obj_left"><a href="/index">Easy Booking</a></h1>
-				<p class="obj_right top_margin_10">Welcome, {{session['user_profile']['name']}}| <a href="/logout_handler">Logout</a></p>
+				<p class="obj_right top_margin_10">Welcome, <a href="/profile">{{session['user_profile']['name']}}</a> | <a href="/logout_handler">Logout</a></p>
 				<div class="clear"></div>
 			</div>
 		{% endblock %}
@@ -96,6 +95,7 @@
 						<li id="{{'current' if current_tab == 't5' else ''}}"><a href="{{url_for('m_doctor_list')}}"><span>Doctor</span></a></li>
 						<li id="{{'current' if current_tab == 't6' else ''}}"><a href="{{url_for('m_nurse_list')}}"><span>Nurse</span></a></li>
 						<li id="{{'current' if current_tab == 't7' else ''}}"><a href="{{url_for('m_user_list')}}"><span>User</span></a></li>
+						<li id="{{'current' if current_tab == 't8' else ''}}"><a href="{{url_for('m_events_list')}}"><span>Booking</span></a></li>
 					</ul>
 					<div class="right_margin_10 obj_right"><input type="text" name="q" id="search_input"/></div>
 				</div>

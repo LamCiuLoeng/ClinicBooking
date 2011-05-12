@@ -13,7 +13,7 @@
 				mapTypeId:google.maps.MapTypeId.ROADMAP,
 				minZoom:10,
                 maxZoom:18,
-                center: new google.maps.LatLng(22.396428, 114.0274970),  //hong kong lat and lng
+                center: new google.maps.LatLng(22.396428, 114.0274970)  //hong kong lat and lng
 			});
 		
 		{% if clinic.location[0] and clinic.location[1] %}	
@@ -66,20 +66,19 @@
 {% endblock %}
 
 {% block content %}
-<form action="/m_clinic_save" method="post" enctype="multipart/form-data">
+<form action="/m_clinic_save" method="post" enctype="multipart/form-data" class="baseform">
 	<input type="hidden" name="type" value="UPDATE"/>
 	<input type="hidden" name="id" value="{{clinic.id}}"/>
 	<input type="hidden" name="lat" id="lat" value="{{clinic.location[0]}}"/>
 	<input type="hidden" name="lng" id="lng" value="{{clinic.location[1]}}"/>
-	
-	<ul>
-		<li><label for="name">Clinic Name</label><input type="text" name="name" id="name" value="{{clinic.name|ifFalse('')}}"/></li>
-		<li><label for="website">Website</label><input type="text" name="website" id="website" value="{{clinic.website|ifFalse('')}}"/></li>
-		<li><label for="address">Address</label><textarea name="address" id="address">{{clinic.address|ifFalse('')}}</textarea></li>
-		<li><label for="desc">Description</label><textarea name="desc" id="desc">{{clinic.desc|ifFalse('')}}</textarea></li>
-		<li><label for="image_url">Image</label><input type="file" name="image_url"/></li>		
-		<li><label for="location">Location</label><div id="gmap" style="width:500px;height:300px"></div></li>
-	</ul>
+
+		<p><label for="name" class="label">Clinic Name</label><input type="text" name="name" id="name" value="{{clinic.name|ifFalse('')}}" class="field"/></p>
+		<p><label for="website" class="label">Website</label><input type="text" name="website" id="website" value="{{clinic.website|ifFalse('')}}" class="field"/></p>
+		<p><label for="address" class="label">Address</label><textarea name="address" id="address" class="field">{{clinic.address|ifFalse('')}}</textarea></p>
+		<p><label for="desc" class="label">Description</label><textarea name="desc" id="desc" class="field">{{clinic.desc|ifFalse('')}}</textarea></p>
+		<p><label for="image_url" class="label">Image</label><input type="file" name="image_url" class="field"/></p>		
+		<p><label for="location" class="label">Location</label><div id="gmap" style="width:500px;height:300px;margin-left:200px;"></div></p>
+
 	<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
 </form>
 		

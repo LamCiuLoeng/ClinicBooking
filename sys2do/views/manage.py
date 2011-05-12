@@ -9,11 +9,11 @@ from flask.helpers import jsonify
 
 from sys2do.model import connection
 from sys2do.util.common import MESSAGE_INFO, MESSAGE_ERROR, _g, upload
+from sys2do.util.decorator import login_required, templated
 
 
 
-
-
+@login_required
 def m_clinic_list():
     try:
         page = request.values.get("page", 1)
@@ -25,6 +25,7 @@ def m_clinic_list():
     return render_template("m_clinic_list.html", paginate_clinics = paginate_clinics)
 
 
+@login_required
 def m_clinic_update():
     action_type = request.values.get("action_type", None)
     if not action_type:
@@ -55,7 +56,7 @@ def m_clinic_update():
         return redirect(url_for("m_clinic_list"))
 
 
-
+@login_required
 def m_clinic_save():
     name = _g("name")
     if not name :
@@ -97,7 +98,7 @@ def m_clinic_save():
 
 
 
-
+@login_required
 def m_doctor_list():
     ds = connection.DoctorProfile.find({'active':0})
     try:
@@ -109,6 +110,8 @@ def m_doctor_list():
     paginate_docotrs = Page(ds, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_doctor_list"), page))
     return render_template("m_doctor_list.html", paginate_docotrs = paginate_docotrs)
 
+
+@login_required
 def m_doctor_update():
     action_type = request.values.get("action_type", None)
     if not action_type:
@@ -144,7 +147,7 @@ def m_doctor_update():
         return redirect(url_for("m_clinic_list"))
 
 
-
+@login_required
 def m_doctor_save():
     required_fields = ["email", "password", "repassword", "first_name", "last_name"]
     for f in required_fields:
@@ -228,7 +231,7 @@ def m_doctor_save():
         flash("No such action type !", MESSAGE_ERROR)
         return redirect(url_for("m_doctor_list"))
 
-
+@login_required
 def m_nurse_list():
     try:
         page = request.values.get("page", 1)
@@ -239,6 +242,8 @@ def m_nurse_list():
     paginate_nurses = Page(ns, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_nurse_list"), page))
     return render_template("m_nurse_list.html", paginate_nurses = paginate_nurses)
 
+
+@login_required
 def m_nurse_update():
     action_type = request.values.get("action_type", None)
     if not action_type:
@@ -270,6 +275,8 @@ def m_nurse_update():
         flash("No such action type !", MESSAGE_ERROR)
         return redirect(url_for("m_nurse_list"))
 
+
+@login_required
 def m_nurse_save():
     required_fields = ["email", "password", "repassword", "first_name", "last_name"]
     for f in required_fields:
@@ -344,8 +351,47 @@ def m_nurse_save():
         return redirect(url_for("m_nurse_list"))
 
 
+@login_required
 def m_user_list():
     pass
 
+@login_required
 def m_user_update():
     pass
+
+
+
+@login_required
+@templated("m_events_list.html")
+def m_events_list():
+    try:
+        page = _g("page", 1)
+    except:
+        page = 1
+    es = list(connection.Events.find({"active" : 0}).sort("date", pymongo.DESCENDING))
+    paginate_events = Page(es, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_events_list"), page))
+    return {"paginate_events" : paginate_events}
+
+
+@login_required
+def m_events_update():
+    id = _g("id")
+    if not id :
+        flash("No id supplied !", MESSAGE_ERROR)
+        return redirect(url_for("m_events_list"))
+    action_type = _g("action_type")
+    if not action_type in ["m", "c", "p"]:
+        flash("No such action !", MESSAGE_ERROR)
+        return redirect(url_for("m_events_list"))
+    e = connection.Events.one({"id" : int(id)})
+
+    if action_type == "m":
+        return render_template("m_events_update.html", event = e)
+    elif action_type == "c": #cancel
+        e.status = 2
+        e.save()
+        return jsonify({"success" : True, "message" : "Update successfully !"})
+    elif action_type == "p": #confirmed
+        e.status = 1
+        e.save()
+        return jsonify({"success" : True, "message" : "Update successfully !"})

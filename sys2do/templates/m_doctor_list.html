@@ -18,7 +18,11 @@
 		{% set info = c.populate() %}
 	<tr>
         <th scope="row"><a href="/m_doctor_update?id={{c.id}}&action_type=m"><b>{{info['name']}}</b></a></th>
-        <td>{{c.clinic}}</td>
+        <td>
+        	{% for cid in c.clinic %}
+        		{{cid|getByID("Clinic","name")}}&nbsp;
+        	{% endfor %}
+        </td>
 	</tr>
 	{% endfor %}
 </tbody>

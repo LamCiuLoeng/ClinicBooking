@@ -9,7 +9,7 @@ from jinja2.filters import do_default
 #from flask import current_app as app
 #from sys2do import app
 
-__all__ = ['todayBefor', 'formatTime', 'formatDate', 'ifFalse']
+__all__ = ['todayBefor', 'formatTime', 'formatDate', 'string2Date', 'ifFalse', 'getByID']
 
 
 def todayBefor(d):
@@ -32,5 +32,15 @@ def formatDate(d, f = "%Y-%m-%d"):
     except:
         return str(d)
 
+
+def string2Date(v):
+    return "%s-%s-%s" % (v[:4], v[4:6], v[-2:])
+
 def ifFalse(v, default = u""):
     return do_default(v, default) or default
+
+
+def getByID(id, obj, attr):
+    from sys2do.model import connection
+    v = getattr(getattr(connection, obj).one({"id" : id}), attr)
+    return v() if callable(v) else v

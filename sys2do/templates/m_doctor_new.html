@@ -1,6 +1,6 @@
 {% extends "master.html" %}
 
-{% set current_tab = "t4" %}
+{% set current_tab = "t5" %}
 
 {% block extJS %}
 <script language="JavaScript" type="text/javascript">
@@ -49,44 +49,44 @@
 {% endblock %}
 
 {% block content %}
-<form action="/m_doctor_save" method="post" enctype="multipart/form-data">
+<form action="/m_doctor_save" method="post" enctype="multipart/form-data" class="baseform">
 	<input type="hidden" name="action_type" value="NEW"/>
 
-	
-	<ul>
-		<li><label for="email">E-mail</label><input type="text" name="email" id="email"/></li>
-		<li><label for="password">Password</label><input type="password" name="password" id="password"/></li>
-		<li><label for="repassword">Confirmed Password</label><input type="password" name="repassword" id="repassword"/></li>
-		<li><label for="first_name">First Name</label><input type="text" name="first_name" id="first_name"/></li>
-		<li><label for="last_name">Last Name</label><input type="text" name="last_name" id="last_name"/></li>
-		<li><label for="phone">Phone</label><input type="text" name="phone" id="phone"/></li>
-		<li><label for="image_url">Image</label><input type="file" name="image_url"/></li>
-		<li>
-			<label for="clinic">Belong to Clinic</label>
-			<select name="clinic" multiple="true">
+
+		<p><label for="email" class="label">E-mail</label><input type="text" name="email" id="email" class="field"/></p>
+		<p><label for="password" class="label">Password</label><input type="password" name="password" id="password" class="field"/></p>
+		<p><label for="repassword" class="label">Confirmed Password</label><input type="password" name="repassword" id="repassword" class="field"/></p>
+		<p><label for="first_name" class="label">First Name</label><input type="text" name="first_name" id="first_name" class="field"/></p>
+		<p><label for="last_name" class="label">Last Name</label><input type="text" name="last_name" id="last_name" class="field"/></p>
+		<p><label for="phone" class="label">Phone</label><input type="text" name="phone" id="phone" class="field"/></p>
+		<p><label for="image_url" class="label">Image</label><input type="file" name="image_url" class="field"/></p>
+		<p>
+			<label for="clinic" class="label">Belong to Clinic</label>
+			<select name="clinic" multiple="true" class="field">
 				{% for c in clinics %}
 					<option value="{{c.id}}">{{c.name}}</option>
 				{% endfor %}
 			</select>
-		</li>	
-		<li>
-			<label>Avaiable Days</label>
+		</p>	
+		<p>
+			<label class="label">Avaiable Days</label>
+			<span style="margin-left:20px">
 			{% for i in ['MON','TUE','WED','THU','FRI','SAT','SUN']%}
 				<input type="checkbox" name="avaiable_day" value="{{loop.index}}"/>&nbsp;{{i}}
 			{% endfor %}
-		</li>
-		<li><label for="qty">Schedule</label>Book <input type="text" name="qty" id="qty" value="10"/> persons per day</li>
-		<li>
-			<label for="category">Category</label>
-			<select name="category" multiple="true">
+			</span>
+		</p>
+		<p><label for="qty" class="label">Schedule</label><span style="margin-left:20px">Book <input type="text" name="qty" id="qty" value="10"/> persons per day</span></p>
+		<p>
+			<label for="category" class="label">Category</label>
+			<select name="category" multiple="true" class="field">
 				{% for c in categories%}
 					<option value="{{c.id}}">{{c.name}}</option>
 				{% endfor %}
 			</select>
-		</li>
-		<li><label for="desc">Description</label><textarea name="desc" id="desc"></textarea></li>
-		
-	</ul>
+		</p>
+		<p><label for="desc" class="label">Description</label><textarea name="desc" id="desc" class="field"></textarea></p>
+
 	<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
 </form>
 		

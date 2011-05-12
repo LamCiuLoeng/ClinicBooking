@@ -61,19 +61,22 @@
 									div.unbind("click");
 									div.unbind("mouseover");
 									$.pnotify({
-									    //pnotify_title: "Booking successfully!",
-									    pnotify_text: '<div class="success"><p>Your request has submit successfully!</p></div>',
+									    pnotify_title: "Notice",
+									    pnotify_text: 'Your request has submit successfully!',
 									    pnotify_nonblock: true,
-									    pnotify_mouse_reset: false
-									
+									    pnotify_mouse_reset: false,
+									    pnotify_opacity: .8,
+										pnotify_animation: 'show'
 									});
 								}else{
 									$.pnotify({
-									    //pnotify_title: "Booking successfully!",
-									    pnotify_text: '<div class="error"><p>The service is not avaiable now ,please try it later !</p></div>',
+									    pnotify_title: "Warning",
+									    pnotify_text: 'The service is not avaiable now ,please try it later !',
 									    pnotify_nonblock: true,
-									    pnotify_mouse_reset: false
-									
+									    pnotify_mouse_reset: false,
+										notify_mouse_reset: false,
+									    pnotify_opacity: .8,
+										pnotify_animation: 'show'
 									});
 								}
 						});

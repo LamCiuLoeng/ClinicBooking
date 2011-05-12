@@ -161,12 +161,15 @@ class Events(Abstract):
         'uid': int,
         'did': int,
         'date' : unicode,
-        'status' : unicode,
+        'status' : int,
         'remark':unicode,
     }
 
     equired_fields = ['uid', 'did', 'start', 'end']
-    default_values = {'create_time':datetime.datetime.now()}
+    default_values = {
+                      'create_time':datetime.datetime.now(),
+                      'status' : 0 #0 is new ,1 is confirmed , 2 is cancel
+                      }
 
     validators = {
 
@@ -176,6 +179,12 @@ class Events(Abstract):
     def __repr__(self):
         return self.title
 
+    def showStatus(self):
+        return {
+                0 : "NEW",
+                1 : "CONFIRMED",
+                2 : "CANCEL"
+                }[self.status]
 
 @connection.register
 class Message(Abstract):

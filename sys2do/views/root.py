@@ -4,9 +4,10 @@ from flask import g, render_template, flash, session, redirect, url_for, request
 from sys2do import app
 from sys2do.model import connection
 from flask.helpers import jsonify
-from sys2do.util.decorator import templated
+from sys2do.util.decorator import templated, login_required
+from sys2do.util.common import _g, MESSAGE_ERROR, MESSAGE_INFO, upload
 
-
+@login_required
 @templated("index.html")
 def index():
     if 'login' not in session or not session['login']:
@@ -27,14 +28,20 @@ def login():
 def login_handler():
     email = request.values.get('email', None)
     password = request.values.get('password', None)
+    next = request.values.get('next', None)
     u = connection.User.one({'active' : 0, 'email':email, 'password':password})
+    app.logger.info(next)
     if not u:
         flash("e-mail or password is not correct !")
-        return redirect("/login")
+        if next : return redirect(url_for("login", next = next))
+        return redirect(url_for("login"))
     else:
         session['login'] = True
         session['user_profile'] = u.populate()
-        return redirect("/index")
+        if next:  return redirect(next)
+        return redirect(url_for("index"))
+
+
 
 def logout_handler():
     session.pop('login', None)
@@ -58,11 +65,64 @@ def search():
     app.logger.info(data)
     return jsonify(data)
 
+@templated("register.html")
+def register():
+    return {}
+
+def save_register():
+    u = connection.User.one({'active':0, 'email':_g("email")})
+    if u :
+        flash("The user has been already exist !", MESSAGE_ERROR)
+        return redirect(url_for("register"))
+    if _g("password") != _g("repassword"):
+        flash("The password and confirmed password are not the same !", MESSAGE_ERROR)
+        return redirect(url_for("register"))
+    if not _g("first_name") or not _g("last_name"):
+        flash("The first name or the last name is not supplied !", MESSAGE_ERROR)
+        return redirect(url_for("register"))
+
+    nu = connection.User()
+    nu.id = nu.getID()
+    nu.email = _g("email")
+    nu.password = _g("password")
+    nu.first_name = _g("first_name")
+    nu.last_name = _g("last_name")
+    nu.phone = _g("phone")
+    nu.birthday = _g("birthday")
+
+    r = connection.Role.one({"name" : "NORMALUSER"})
+    nu.roles = [r.id]
+    r.users = r.users + [nu.id]
+    nu.save()
+    r.save()
+
+    flash("Register successfully", MESSAGE_INFO)
+    return redirect(url_for("login"))
 
 
+def check_email():
+    u = connection.User.one({"active" : 0 , "email" : _g("email")})
+    return jsonify({"is_exist" : bool(u)})
 
-@app.before_request
-def check_auth():
-#    if not session.get('login', None): return redirect(url_for("login"))
-    pass
+@templated("profile.html")
+def profile():
+    id = session['user_profile']["id"]
+    u = connection.User.one({"id" : id})
+    return {"user" : u}
 
+
+def save_profile():
+    id = session['user_profile']["id"]
+    u = connection.User.one({"id" : id})
+    u.first_name = _g("first_name")
+    u.last_name = _g("last_name")
+    u.phone = _g("phone")
+    u.birthday = _g("birthday")
+    try:
+        f = upload("image_url")
+        u.image_url = f.id
+    except:
+        app.logger.error(traceback.format_exc())
+    u.save()
+    flash("Update the profile successfully!", MESSAGE_INFO)
+    return redirect(url_for("index"))

@@ -126,3 +126,22 @@ body{
 .cal_box_booked{
 	background-color:brown;
 }
+
+
+/*- Form --------------------------- */
+.baseform{
+			
+}
+.baseform .label{
+	width : 150px;
+	float : left;
+	background-color : #369;
+	color : #fff;
+	font-weight : blod;
+	padding : 3px;
+}
+.baseform .field{
+	width : 300px;
+	margin-left : 20px;
+	
+}

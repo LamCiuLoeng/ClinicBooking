@@ -42,6 +42,9 @@ class User(Abstract):
     def __repr__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
+    def name(self):
+        return '%s %s' % (self.first_name, self.last_name)
+
     def populate(self):
         return {
                 'id' : self.id,

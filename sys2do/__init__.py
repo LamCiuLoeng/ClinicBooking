@@ -2,7 +2,6 @@
 
 from flask import Flask, Module
 
-
 __all__ = ["app"]
 
 app = Flask(__name__, static_path = '/static')
@@ -31,8 +30,13 @@ app.add_url_rule("/", view_func = r.index)
 app.add_url_rule("/index", view_func = r.index)
 app.add_url_rule("/search", view_func = r.search)
 app.add_url_rule("/login", view_func = r.login)
+app.add_url_rule("/register", view_func = r.register)
+app.add_url_rule("/check_email", view_func = r.check_email)
+app.add_url_rule("/save_register", view_func = r.save_register, methods = ['POST'])
 app.add_url_rule("/login_handler", view_func = r.login_handler, methods = ['GET', 'POST'])
 app.add_url_rule("/logout_handler", view_func = r.logout_handler, methods = ['GET', 'POST'])
+app.add_url_rule("/profile", view_func = r.profile)
+app.add_url_rule("/save_profile", view_func = r.save_profile, methods = ['POST'])
 
 import views.action as a
 app.add_url_rule("/list_clinic", view_func = a.list_clinic)
@@ -54,6 +58,8 @@ app.add_url_rule("/m_nurse", view_func = m.m_nurse_list)
 app.add_url_rule("/m_nurse_update", view_func = m.m_nurse_update)
 app.add_url_rule("/m_nurse_save", view_func = m.m_nurse_save, methods = ['POST'])
 app.add_url_rule("/m_user", view_func = m.m_user_list)
+app.add_url_rule("/m_events_list", view_func = m.m_events_list)
+app.add_url_rule("/m_events_update", view_func = m.m_events_update)
 
 
 #===============================================================================
