@@ -12,6 +12,7 @@
 			if(!$("#email").val()){
 				msg.push("Please fill in the doctor's' email! It would be the login name for the user !");
 			}
+			/*
 			if(!$("#password").val()){
 				msg.push("Please fill in the password!");
 			}
@@ -21,6 +22,7 @@
 			if($("#password").val()!=$("#repassword").val()){
 				msg.push("The password is not the same with the confirmed password");
 			}
+			*/
 			if(!$("#first_name").val()){
 				msg.push("Please fill in the first name !");
 			}
@@ -53,10 +55,7 @@
 	<input type="hidden" name="action_type" value="UPDATE"/>
 	<input type="hidden" name="id" value="{{doctor.id}}"/>
 	{% set info = doctor.populate() %}
-
 		<p><label for="email" class="label">E-mail</label><input type="text" name="email" id="email" value="{{info['email']}}" class="field"/></p>
-		<p><label for="password" class="label">Password</label><input type="password" name="password" id="password" class="field"/></p>
-		<p><label for="repassword" class="label">Confirmed Password</label><input type="password" name="repassword" id="repassword" class="field"/></p>
 		<p><label for="first_name" class="label">First Name</label><input type="text" name="first_name" id="first_name" value="{{info['first_name']}}" class="field"/></p>
 		<p><label for="last_name" class="label">Last Name</label><input type="text" name="last_name" id="last_name" value="{{info['last_name']}}" class="field"/></p>
 		<p><label for="phone" class="label">Phone</label><input type="text" name="phone" id="phone" value="{{info['phone']}}" class="field"/></p>

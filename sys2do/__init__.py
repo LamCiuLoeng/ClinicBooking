@@ -14,6 +14,18 @@ app.config.from_object("sys2do.setting")
 #    file_handler.setLevel(logging.WARNING)
 #    app.logger.addHandler(file_handler)
 
+if app.config.get("LOGGING_FILE", True):
+    import logging, logging.handlers
+    file_handler = logging.handlers.TimedRotatingFileHandler(app.config.get("LOGGING_FILE_PATH"), when = 'D', interval = 1, backupCount = 5, encoding = "utf-8", delay = False)
+    file_handler.setLevel(app.config.get("LoGGING_LEVEL"))
+    file_handler.setFormatter(logging.Formatter('''
+    Message type:       %(levelname)s
+    Location:           %(pathname)s:%(lineno)d
+    Function:           %(funcName)s
+    Time:               %(asctime)s
+    Message:            %(message)s
+    '''))
+    app.logger.addHandler(file_handler)
 
 #===============================================================================
 # sys.py
@@ -26,6 +38,7 @@ for error_code in [403, 404, 500] : app.error_handlers[error_code] = s.error_pag
 # root.py
 #===============================================================================
 import views.root as r
+app.add_url_rule("/test", view_func = r.test)
 app.add_url_rule("/", view_func = r.index)
 app.add_url_rule("/index", view_func = r.index)
 app.add_url_rule("/search", view_func = r.search)
@@ -37,6 +50,8 @@ app.add_url_rule("/login_handler", view_func = r.login_handler, methods = ['GET'
 app.add_url_rule("/logout_handler", view_func = r.logout_handler, methods = ['GET', 'POST'])
 app.add_url_rule("/profile", view_func = r.profile)
 app.add_url_rule("/save_profile", view_func = r.save_profile, methods = ['POST'])
+app.add_url_rule("/change_password", view_func = r.change_password)
+app.add_url_rule("/save_password", view_func = r.save_password, methods = ['POST'])
 
 import views.action as a
 app.add_url_rule("/list_clinic", view_func = a.list_clinic)

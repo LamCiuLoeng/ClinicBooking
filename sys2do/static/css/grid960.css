@@ -1,5 +1,5 @@
 /* Not Just a Grid v1.0 (c) 2011 Al Redpath / Outrageous Creations! Licenced under an MIT Licence*/
-#container {width:960px;position:relative;margin:auto;}
+#container {width:960px;position:relative;margin:15px auto 15px auto;}
 .full, .half, .threequarter, .quarter,.third,.twothird,.fifth,.twofifth,.threefifth,.fourfifth,.sixth,.fivesixth {float:left;display:inline;margin:0px 10px 0px 10px;padding:0px;}
 .full {width:940px;}
 .half {width:460px;}

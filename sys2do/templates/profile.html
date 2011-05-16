@@ -8,6 +8,7 @@
 	{% else %}
 		<p><img src="/static/images/no_images.jpg"/></p>
 	{% endif %}
+	<p><a href="/change_password">Change Password</a></p>
 	<p><label for="email" class="label">E-mail</label><span class="field">{{user.email}}</span></p>
 	<p><label for="first_name" class="label">First Name</label><input type="text" name="first_name" id="first_name" value="{{user.first_name}}" class="field"/></p>
 	<p><label for="last_name" class="label">Last Name</label><input type="text" name="last_name" id="last_name" value="{{user.last_name}}" class="field"/></p>

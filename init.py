@@ -33,181 +33,199 @@ def init():
     print "Adding the default data"
     print "_" * 20
     #init the permission
-    pcreate_clinic = connection.Permission()
-    pcreate_clinic.name = u'CREATE_CLINIC'
-    pcreate_clinic.save()
+    permissions = ["ORDER_ADD", "ORDER_VIEW", "ORDER_CANCEL", "ORDER_UPDATE", "ORDER_VIEW_ALL",
+                   "CLINIC_ADD", "CLINIC_VIEW", "CLINIC_VIEW_ALL", "CLINIC_UPDATE", "CLINIC_DELETE",
+                   "DOCTOR_ADD", "DOCTOR_UPDATE", "DOCTOR_DELETE",
+                   "NURSE_ADD", "NURSE_UPDATE", "NURSER_DELETE",
+                   ]
+    permissions_mapping = {}
+    for p in permissions:
+        obj = connection.Permission()
+        obj.name = unicode(p)
+        obj.id = obj.getID()
+#        obj.save()
+        permissions_mapping[p] = obj
 
-    padd_user = connection.Permission()
-    padd_user.name = u'ADD_USER'
-    padd_user.save()
+    users = [
+             ("aa@aa.com", "Admin", "Lam"),
+             ("c1@aa.com", "Clinic Manager 1", "Lam"),
+             ("c2@aa.com", "Clinic Manager 2", "Lam"),
+             ("d1@aa.com", "Doctor 1", "Lam"),
+             ("d2@aa.com", "Doctor 2", "Lam"),
+             ("n1@aa.com", "Nurse 1", "Lam"),
+             ("n2@aa.com", "Nurse 2", "Lam"),
+             ("u1@aa.com", "User 1", "Lam"),
+             ("u2@aa.com", "User 2", "Lam"),
+             ("t1@aa.com", "Temp 1", "Lam"),
+             ("t2@aa.com", "Temp 2", "Lam"),
+             ]
+    users_mapping = {}
+    for (email, first_name, last_name) in users:
+        u = connection.User()
+        u.email = unicode(email)
+        u.password = u"aa"
+        u.first_name = unicode(first_name)
+        u.last_name = unicode(last_name)
+        u.id = u.getID()
+#        u.save()
+        users_mapping[email] = u
 
-    pdelete_user = connection.Permission()
-    pdelete_user.name = u'DELETE_NAME'
-    pdelete_user.save()
-
-    pdelete_role = connection.Permission()
-    pdelete_role.name = u'DELETE_ROLE'
-    pdelete_role.save()
-
-    pview_all_clinic = connection.Permission()
-    pview_all_clinic.name = u'VIEW_ALL_CLINIC'
-    pview_all_clinic.save()
-
-    pview_order = connection.Permission()
-    pview_order.name = u'VIEW_ORDER'
-    pview_order.save()
-
-
-
-
-
-    #add the init value into db
-    admin = connection.User()
-    admin.email = u'aa@aa.com'
-    admin.password = u'aa'
-    admin.first_name = u'Admin'
-    admin.last_name = u'Test'
-    admin.id = admin.getID()
-    admin.save()
-
-    temp1 = connection.User()
-    temp1.email = u'temp1@aa.com'
-    temp1.password = u'aa'
-    temp1.id = temp1.getID()
-    temp1.first_name = u"Temp1"
-    temp1.last_name = u"KK"
-    temp1.save()
-
-    temp2 = connection.User()
-    temp2.email = u'temp2@aa.com'
-    temp2.password = u'aa'
-    temp2.id = temp2.getID()
-    temp2.first_name = u"Temp2"
-    temp2.last_name = u"KK"
-    temp2.save()
-
-    temp3 = connection.User()
-    temp3.email = u'temp3@aa.com'
-    temp3.password = u'aa'
-    temp3.id = temp3.getID()
-    temp3.first_name = u"Temp3"
-    temp3.last_name = u"KK"
-    temp3.save()
-
-    temp4 = connection.User()
-    temp4.email = u'temp4@aa.com'
-    temp4.password = u'aa'
-    temp4.id = temp4.getID()
-    temp4.first_name = u"Temp4"
-    temp4.last_name = u"KK"
-    temp4.save()
-
-    radmin = connection.Role()
-    radmin.name = u'ADMINISTRATOR'
-    radmin.display = u'Administrator'
-    radmin.users = [admin.id]
-    radmin.id = radmin.getID()
-    radmin.save()
-
-    rdoctor = connection.Role()
-    rdoctor.name = u'DOCTOR'
-    rdoctor.displayname = u'Doctor'
-    rdoctor.id = rdoctor.getID()
-    rdoctor.save()
-
-    rnurse = connection.Role()
-    rnurse.name = u'NURSE'
-    rnurse.displayname = u'Nurse'
-    rnurse.id = rnurse.getID()
-    rnurse.save()
-
-    ruser = connection.Role()
-    ruser.name = u'NORMALUSER'
-    ruser.displayname = u'Normal User'
-    ruser.id = ruser.getID()
-    ruser.save()
-
-    rtemp = connection.Role()
-    rtemp.name = u'TEMPUSER'
-    rtemp.displayname = u'Temp User'
-    rtemp.id = rtemp.getID()
-    rtemp.users = [temp1.id, temp2.id]
-    rtemp.save()
+    roles = [
+             ("ADMINISTRATOR", "Administrator"),
+             ("CLINIC_MANAGER", "Clinic Manager"),
+             ("DOCTOR", "Doctor"),
+             ("NURSE", "Nurse"),
+             ("NORMALUSER", "Normal User"),
+             ("TEMPUSER", "Temp User")
+             ]
+    roles_mapping = {}
+    for (name, display_name) in roles:
+        r = connection.Role()
+        r.name = unicode(name)
+        r.display = unicode(display_name)
+        r.id = r.getID()
+#        r.save()
+        roles_mapping[name] = r
 
 
-    c1 = connection.Clinic()
-    c1.id = c1.getID()
-    c1.address = u"C1 Address"
-    c1.name = u'Clinic 1'
-    c1.desc = u'This is C1 Clinic.'
-    c1.location = (22.396428, 114.1094970)
-    c1.save()
+    users_mapping["aa@aa.com"].roles = [roles_mapping["ADMINISTRATOR"].id, ]
+    users_mapping["c1@aa.com"].roles = [roles_mapping["CLINIC_MANAGER"].id, ]
+    users_mapping["c2@aa.com"].roles = [roles_mapping["CLINIC_MANAGER"].id, ]
+    users_mapping["d1@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
+    users_mapping["d2@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
+    users_mapping["n1@aa.com"].roles = [roles_mapping["NURSE"].id, ]
+    users_mapping["n2@aa.com"].roles = [roles_mapping["NURSE"].id, ]
+    users_mapping["u1@aa.com"].roles = [roles_mapping["NORMALUSER"].id, ]
+    users_mapping["u2@aa.com"].roles = [roles_mapping["NORMALUSER"].id, ]
+    users_mapping["t1@aa.com"].roles = [roles_mapping["TEMPUSER"].id, ]
+    users_mapping["t2@aa.com"].roles = [roles_mapping["TEMPUSER"].id, ]
 
-    c2 = connection.Clinic()
-    c2.id = c2.getID()
-    c2.address = u"C2 Address"
-    c2.name = u'Clinic 2'
-    c2.desc = u'This is C2 Clinic.'
-    c2.location = (22.396428, 114.0094970)
-    c2.save()
+    roles_mapping["ADMINISTRATOR"].permissions = [v.id for k, v in permissions_mapping.items()]
+    roles_mapping["ADMINISTRATOR"].users = [users_mapping["aa@aa.com"].id, ]
+    roles_mapping["CLINIC_MANAGER"].permissions = [
+                                                   permissions_mapping["CLINIC_VIEW"].id,
+                                                   permissions_mapping["CLINIC_UPDATE"].id,
+                                                   permissions_mapping["DOCTOR_ADD"].id,
+                                                   permissions_mapping["DOCTOR_UPDATE"].id,
+                                                   permissions_mapping["DOCTOR_DELETE"].id,
+                                                   permissions_mapping["NURSE_ADD"].id,
+                                                   permissions_mapping["NURSE_UPDATE"].id,
+                                                   permissions_mapping["NURSER_DELETE"].id,
+                                                   permissions_mapping["ORDER_VIEW"].id,
+                                                   permissions_mapping["ORDER_CANCEL"].id,
+                                                   permissions_mapping["ORDER_UPDATE"].id,
+                                                   ]
+    roles_mapping["CLINIC_MANAGER"].users = [users_mapping["c1@aa.com"].id, users_mapping["c2@aa.com"].id]
+    roles_mapping["DOCTOR"].permissions = [
+                                           permissions_mapping["ORDER_VIEW"].id,
+                                           permissions_mapping["ORDER_CANCEL"].id,
+                                           permissions_mapping["ORDER_UPDATE"].id,
+                                           ]
+    roles_mapping["DOCTOR"].users = [users_mapping["d1@aa.com"].id, users_mapping["d2@aa.com"].id]
+    roles_mapping["NURSE"].permissions = [
+                                           permissions_mapping["ORDER_VIEW"].id,
+                                           permissions_mapping["ORDER_CANCEL"].id,
+                                           permissions_mapping["ORDER_UPDATE"].id,
+                                          ]
+    roles_mapping["NURSE"].users = [users_mapping["n1@aa.com"].id, users_mapping["n2@aa.com"].id]
+    roles_mapping["NORMALUSER"].permissions = [
+                                               permissions_mapping["ORDER_ADD"].id,
+                                               permissions_mapping["ORDER_VIEW"].id,
+                                               permissions_mapping["ORDER_CANCEL"].id,
+                                               ]
+    roles_mapping["NORMALUSER"].users = [users_mapping["u1@aa.com"].id, users_mapping["u2@aa.com"].id]
+    roles_mapping["TEMPUSER"].permissions = []
+    roles_mapping["TEMPUSER"].users = [users_mapping["t1@aa.com"].id, users_mapping["t2@aa.com"].id]
 
-    c3 = connection.Clinic()
-    c3.id = c3.getID()
-    c3.name = u'Clinic 3'
-    c3.address = u"C3 Address"
-    c3.desc = u'This is C3 Clinic.'
-    c3.location = (22.296428, 114.0094970)
-    c3.save()
 
-    c4 = connection.Clinic()
-    c4.id = c4.getID()
-    c4.address = u"C4 Address"
-    c4.name = u'Clinic 4'
-    c4.desc = u'This is C4 Clinic.'
-    c4.location = (22.286428, 114.1094970)
-    c4.save()
+    permissions_mapping["ORDER_ADD"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["NORMALUSER"].id, ]
+    permissions_mapping["ORDER_VIEW"].roles = [
+                                               roles_mapping["ADMINISTRATOR"].id,
+                                               roles_mapping["CLINIC_MANAGER"].id,
+                                               roles_mapping["DOCTOR"].id,
+                                               roles_mapping["NURSE"].id,
+                                               ]
+    permissions_mapping["ORDER_CANCEL"].roles = [
+                                                 roles_mapping["ADMINISTRATOR"].id,
+                                                 roles_mapping["NORMALUSER"].id,
+                                                 roles_mapping["DOCTOR"].id,
+                                                 roles_mapping["NURSE"].id,
+                                                 ]
+    permissions_mapping["ORDER_UPDATE"].roles = [
+                                                 roles_mapping["ADMINISTRATOR"].id,
+                                                 roles_mapping["CLINIC_MANAGER"].id,
+                                                 roles_mapping["DOCTOR"].id,
+                                                 roles_mapping["NURSE"].id,
+                                                 ]
+    permissions_mapping["ORDER_VIEW_ALL"].roles = [roles_mapping["ADMINISTRATOR"].id, ]
+    permissions_mapping["CLINIC_ADD"].roles = [roles_mapping["ADMINISTRATOR"].id, ]
+    permissions_mapping["CLINIC_VIEW"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id ]
+    permissions_mapping["CLINIC_VIEW_ALL"].roles = [roles_mapping["ADMINISTRATOR"].id, ]
+    permissions_mapping["CLINIC_UPDATE"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id ]
+    permissions_mapping["CLINIC_DELETE"].roles = [roles_mapping["ADMINISTRATOR"].id, ]
+    permissions_mapping["DOCTOR_ADD"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id ]
+    permissions_mapping["DOCTOR_UPDATE"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id, ]
+    permissions_mapping["DOCTOR_DELETE"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id ]
+    permissions_mapping["NURSE_ADD"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id ]
+    permissions_mapping["NURSE_UPDATE"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id, ]
+    permissions_mapping["NURSER_DELETE"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id ]
 
-    c5 = connection.Clinic()
-    c5.id = c5.getID()
-    c5.name = u'Clinic 5'
-    c5.address = u"C5 Address"
-    c5.desc = u'This is C5 Clinic.'
-    c5.location = (22.284428, 114.1094970)
-    c5.save()
+
+    clinic = [
+              ("C1 Address", "Clinic 1", "This is C1 Clinic.", (22.396428, 114.1094970)),
+              ("C2 Address", "Clinic 2", "This is C2 Clinic.", (22.396428, 114.0094970)),
+              ("C3 Address", "Clinic 3", "This is C3 Clinic.", (22.296428, 114.0094970)),
+              ("C4 Address", "Clinic 4", "This is C4 Clinic.", (22.286428, 114.1094970)),
+              ("C5 Address", "Clinic 5", "This is C5 Clinic.", (22.284428, 114.1094970)),
+              ]
+    clinic_mapping = {}
+    for address, name, desc, (lat, lng) in clinic:
+        c = connection.Clinic()
+        c.id = c.getID()
+        c.address = unicode(address)
+        c.name = unicode(name)
+        c.desc = unicode(desc)
+        c.location = (lat, lng)
+        c.save()
+        clinic_mapping[name] = c
 
 
     d1 = connection.DoctorProfile()
     d1.id = d1.getID()
-    d1.uid = temp1.id
+    d1.uid = users_mapping["d1@aa.com"].id
     d1.desc = u"I'm temp 1 doctor."
-    d1.clinic = [c1.id]
+    d1.clinic = [clinic_mapping["Clinic 1"].id]
     d1.save()
 
     d2 = connection.DoctorProfile()
     d2.id = d2.getID()
-    d2.uid = temp2.id
+    d2.uid = users_mapping["d2@aa.com"].id
     d2.desc = u"I'm temp 2 doctor."
-    d2.clinic = [c1.id]
+    d2.clinic = [clinic_mapping["Clinic 2"].id]
     d2.save()
 
-    d3 = connection.DoctorProfile()
-    d3.id = d3.getID()
-    d3.uid = temp3.id
-    d3.desc = u"I'm temp 3 doctor."
-    d3.clinic = [c2.id]
-    d3.save()
+    n1 = connection.NurseProfile()
+    n1.id = n1.getID()
+    n1.uid = users_mapping["n1@aa.com"].id
+    n1.desc = u"I'm temp 1 nurse."
+    n1.clinic = [clinic_mapping["Clinic 1"].id]
+    n1.save()
 
-    d4 = connection.DoctorProfile()
-    d4.id = d4.getID()
-    d4.uid = temp4.id
-    d4.desc = u"I'm temp 4 doctor."
-    d3.save()
+    n2 = connection.NurseProfile()
+    n2.id = n1.getID()
+    n2.uid = users_mapping["n2@aa.com"].id
+    n2.desc = u"I'm temp 2 nurse."
+    n2.clinic = [clinic_mapping["Clinic 2"].id]
+    n2.save()
 
-    c1.doctors = [d1.id, d2.id]
-    c2.doctors = [d3.id]
-    c1.save()
-    c2.save()
+    clinic_mapping["Clinic 1"].doctors = [d1.id]
+    clinic_mapping["Clinic 1"].nurses = [n1.id]
+    clinic_mapping["Clinic 2"].doctors = [d2.id]
+    clinic_mapping["Clinic 2"].nurses = [n2.id]
 
+    for m in [users_mapping, roles_mapping, permissions_mapping, clinic_mapping]:
+        for k, v in m.items():
+            v.save()
 
 
     print "*" * 20

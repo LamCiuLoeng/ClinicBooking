@@ -9,10 +9,10 @@ from flask.helpers import jsonify
 
 from sys2do.model import connection
 from sys2do.util.common import MESSAGE_INFO, MESSAGE_ERROR, _g, upload
-from sys2do.util.decorator import login_required, templated
+from sys2do.util.decorator import login_required, templated, has_all_permissions, has_any_permissions, is_all_roles, is_any_roles
 
 
-
+@has_any_permissions(["CLINIC_VIEW", "CLINIC_VIEW_ALL"])
 @login_required
 def m_clinic_list():
     try:
@@ -25,6 +25,7 @@ def m_clinic_list():
     return render_template("m_clinic_list.html", paginate_clinics = paginate_clinics)
 
 
+@has_any_permissions(["CLINIC_ADD", "CLINIC_UPDATE"])
 @login_required
 def m_clinic_update():
     action_type = request.values.get("action_type", None)
@@ -56,6 +57,7 @@ def m_clinic_update():
         return redirect(url_for("m_clinic_list"))
 
 
+@has_any_permissions(["CLINIC_ADD", "CLINIC_UPDATE"])
 @login_required
 def m_clinic_save():
     name = _g("name")
@@ -97,7 +99,7 @@ def m_clinic_save():
         return redirect(url_for("m_clinic_list"))
 
 
-
+@has_any_permissions(["DOCTOR_ADD", "DOCTOR_UPDATE"])
 @login_required
 def m_doctor_list():
     ds = connection.DoctorProfile.find({'active':0})
@@ -111,6 +113,7 @@ def m_doctor_list():
     return render_template("m_doctor_list.html", paginate_docotrs = paginate_docotrs)
 
 
+@has_any_permissions(["DOCTOR_ADD", "DOCTOR_UPDATE"])
 @login_required
 def m_doctor_update():
     action_type = request.values.get("action_type", None)
@@ -147,21 +150,28 @@ def m_doctor_update():
         return redirect(url_for("m_clinic_list"))
 
 
+@has_any_permissions(["DOCTOR_ADD", "DOCTOR_UPDATE"])
 @login_required
 def m_doctor_save():
-    required_fields = ["email", "password", "repassword", "first_name", "last_name"]
+    required_fields = ["email", "first_name", "last_name"]
     for f in required_fields:
         if not _g(f) :
             flash("The required field is not supplied !", MESSAGE_ERROR)
             return redirect(url_for("m_doctor_list"))
 
-    if _g("password") != _g("repassword"):
-        flash("The password and the confirmed password are not the same !", MESSAGE_ERROR)
-        return redirect(url_for("m_doctor_list"))
 
     action_type = _g("action_type")
     _gl = request.form.getlist #could not move it outside the function , don't know why
     if action_type == "NEW":
+        if not _g("password") or not _g("repassword"):
+            flash("The required field is not supplied !", MESSAGE_ERROR)
+            return redirect(url_for("m_doctor_list"))
+
+        if _g("password") != _g("repassword"):
+            flash("The password and the confirmed password are not the same !", MESSAGE_ERROR)
+            return redirect(url_for("m_doctor_list"))
+
+
         u = connection.User()
         u.id = u.getID()
         u.email = _g("email")
@@ -231,7 +241,9 @@ def m_doctor_save():
         flash("No such action type !", MESSAGE_ERROR)
         return redirect(url_for("m_doctor_list"))
 
+
 @login_required
+@has_any_permissions(["NURSE_ADD", "NURSE_UPDATE"])
 def m_nurse_list():
     try:
         page = request.values.get("page", 1)
@@ -244,6 +256,7 @@ def m_nurse_list():
 
 
 @login_required
+@has_any_permissions(["NURSE_ADD", "NURSE_UPDATE"])
 def m_nurse_update():
     action_type = request.values.get("action_type", None)
     if not action_type:
@@ -277,20 +290,25 @@ def m_nurse_update():
 
 
 @login_required
+@has_any_permissions(["NURSE_ADD", "NURSE_UPDATE"])
 def m_nurse_save():
-    required_fields = ["email", "password", "repassword", "first_name", "last_name"]
+    required_fields = ["email", "first_name", "last_name"]
     for f in required_fields:
         if not _g(f) :
             flash("The required field is not supplied !", MESSAGE_ERROR)
             return redirect(url_for("m_nurse_list"))
 
-    if _g("password") != _g("repassword"):
-        flash("The password and the confirmed password are not the same !", MESSAGE_ERROR)
-        return redirect(url_for("m_nurse_list"))
 
     action_type = _g("action_type")
     _gl = request.form.getlist
     if action_type == "NEW":
+        if not _g("password") or not _g("repassword"):
+            flash("The required field is not supplied !", MESSAGE_ERROR)
+            return redirect(url_for("m_nurse_list"))
+
+        if _g("password") != _g("repassword"):
+            flash("The password and the confirmed password are not the same !", MESSAGE_ERROR)
+            return redirect(url_for("m_nurse_list"))
         u = connection.User()
         u.id = u.getID()
         u.email = _g("email")
@@ -362,6 +380,7 @@ def m_user_update():
 
 
 @login_required
+@has_any_permissions(["ORDER_VIEW", "ORDER_VIEW_ALL"])
 @templated("m_events_list.html")
 def m_events_list():
     try:
@@ -373,7 +392,10 @@ def m_events_list():
     return {"paginate_events" : paginate_events}
 
 
+
+
 @login_required
+@has_any_permissions(["ORDER_UPDATE", "ORDER_CANCEL"])
 def m_events_update():
     id = _g("id")
     if not id :

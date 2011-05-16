@@ -4,7 +4,7 @@ from flask import g, render_template, flash, session, redirect, url_for, request
 from sys2do import app
 from sys2do.model import connection
 from flask.helpers import jsonify
-from sys2do.util.decorator import templated, login_required
+from sys2do.util.decorator import templated, login_required, has_all_permissions
 from sys2do.util.common import _g, MESSAGE_ERROR, MESSAGE_INFO, upload
 
 @login_required
@@ -21,7 +21,7 @@ def index():
 @templated("login.html")
 def login():
     if session.get('login', None):
-        return redirect("/index")
+        return redirect(url_for("index"))
     return {}
 
 
@@ -38,6 +38,17 @@ def login_handler():
     else:
         session['login'] = True
         session['user_profile'] = u.populate()
+        roles = []
+        permissions = set()
+        for i in u.roles:
+            r = connection.Role.one({"id" : i})
+            roles.append(r.name)
+            for pid in r.permissions:
+                permissions.add(connection.Permission.one({"id" : pid}).name)
+        session['user_profile']['roles'] = roles
+        session['user_profile']['permissions'] = permissions
+        app.logger.info(roles)
+        app.logger.info(permissions)
         if next:  return redirect(next)
         return redirect(url_for("index"))
 
@@ -126,3 +137,38 @@ def save_profile():
     u.save()
     flash("Update the profile successfully!", MESSAGE_INFO)
     return redirect(url_for("index"))
+
+
+@login_required
+@templated("change_password.html")
+def change_password():
+    id = session['user_profile']["id"]
+    u = connection.User.one({"id" : int(id)})
+    return {"user" : u}
+
+
+
+@login_required
+def save_password():
+    id = session['user_profile']["id"]
+    u = connection.User.one({"id" : int(id)})
+    if u.password != _g("old_password", None):
+        flash("Old Password is wrong", MESSAGE_ERROR)
+        return redirect(url_for("change_password"))
+
+    if not _g("new_password", None):
+        flash("The new password could not be blank", MESSAGE_ERROR)
+        return redirect(url_for("change_password"))
+    if _g("new_password", None) != _g("new_repassword", None):
+        flash("The new password and the confirm password are not the same !", MESSAGE_ERROR)
+        return redirect(url_for("change_password"))
+
+    u.password = _g("new_password")
+    u.save()
+    flash("Update the password successfully !", MESSAGE_INFO)
+    return redirect(url_for("change_password"))
+
+@has_all_permissions(["ORDER_ADD"])
+@templated("index.html")
+def test():
+    return {}
