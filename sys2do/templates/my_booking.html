@@ -19,7 +19,7 @@
         <th scope="row">{{e.date}}</th>
         <td>{{e.did}}</td>
         <td>{{e.remark}}</td>
-        <td>Confirmed</td>
+        <td>{{e.showStatus()}}</td>
 	</tr>
 	{% endfor %}
 </tbody>
