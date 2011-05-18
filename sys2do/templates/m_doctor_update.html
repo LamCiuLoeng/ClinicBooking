@@ -55,52 +55,118 @@
 	<input type="hidden" name="action_type" value="UPDATE"/>
 	<input type="hidden" name="id" value="{{doctor.id}}"/>
 	{% set info = doctor.populate() %}
-		<p><label for="email" class="label">E-mail</label><input type="text" name="email" id="email" value="{{info['email']}}" class="field"/></p>
-		<p><label for="first_name" class="label">First Name</label><input type="text" name="first_name" id="first_name" value="{{info['first_name']}}" class="field"/></p>
-		<p><label for="last_name" class="label">Last Name</label><input type="text" name="last_name" id="last_name" value="{{info['last_name']}}" class="field"/></p>
-		<p><label for="phone" class="label">Phone</label><input type="text" name="phone" id="phone" value="{{info['phone']}}" class="field"/></p>
-		<p><label for="image_url" class="label">Image</label><input type="file" name="image_url" class="field"/></p>
-		<p>
-			<label for="clinic" class="label">Belong to Clinic</label>
-			<select name="clinic" multiple="true" class="field">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td width="130">&nbsp;</td>
+	    <td width="150" align="right" class="input_left_title"><label for="email" class="label">E-mail</label></td>
+	    <td><input type="text" name="email" id="email" value="{{info['email']}}" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="first_name" class="label">First Name</label></td>
+	    <td><input type="text" name="first_name" id="first_name" value="{{info['first_name']}}" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="last_name" class="label">Last Name</label></td>
+	    <td><input type="text" name="last_name" id="last_name" value="{{info['last_name']}}" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="phone" class="label">Phone</label></td>
+	    <td><input type="text" name="phone" id="phone" value="{{info['phone']}}" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="image_url" class="label">Image</label></td>
+	    <td><input type="file" name="image_url" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="clinic" class="label">Belong to Clinic</label></td>
+	    <td><select name="clinic" multiple="multiple" class="field">
+	      
+
 				{% for c in clinics %}
 					{%if c.id in doctor.clinic %}
-						<option value="{{c.id}}" selected="true">{{c.name}}</option>
+						
+	      <option value="{{c.id}}" selected="selected">{{c.name}}</option>
+	      
 					{% else %}
-						<option value="{{c.id}}">{{c.name}}</option>
+						
+	      <option value="{{c.id}}">{{c.name}}</option>
+	      
 					{% endif%}
 				{% endfor %}
-			</select>
-		</p>	
-		<p>
-			<label class="label">Avaiable Days</label>
-			<span class="field">
-			{% for i in ['MON','TUE','WED','THU','FRI','SAT','SUN']%}
-				{% if loop.index in doctor.avaiable_day %}
-					<input type="checkbox" name="avaiable_day" value="{{loop.index}}" checked="true"/>&nbsp;{{i}}
+			
+        </select></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label class="label">Avaiable Days</label></td>
+	    <td><span class="field"> {% for i in ['MON','TUE','WED','THU','FRI','SAT','SUN']%}
+			{% if loop.index in doctor.avaiable_day %}
+            <input type="checkbox" name="avaiable_day" value="{{loop.index}}" checked="checked"/>
+            &nbsp;{{i}}
 				{% else %}
-					<input type="checkbox" name="avaiable_day" value="{{loop.index}}"/>&nbsp;{{i}}
+            <input type="checkbox" name="avaiable_day" value="{{loop.index}}"/>
+            &nbsp;{{i}}
 				{% endif %}
-			{% endfor %}
-			</span>
-		</p>
-		<p><label for="qty" class="label">Schedule</label><span class="field">Book <input type="text" name="qty" id="qty" value="{{doctor.qty}}"/> persons per day</span></p>
-		<p>
-			<label for="category" class="label">Category</label>
-			<select name="category" multiple="true" class="field">
+		{% endfor %} </span></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="qty" class="label">Schedule</label></td>
+	    <td><span class="field">Book
+            <input type="text" name="qty" id="qty" value="{{doctor.qty}}"/>
+persons per day</span></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="category" class="label">Category</label></td>
+	    <td><select name="category" multiple="multiple" class="field">
+	      
+		  
 				{% for c in categories%}
 					{% if c.id in doctor.category %}
-						<option value="{{c.id}}" selected="true">{{c.name}}</option>
+						
+	      <option value="{{c.id}}" selected="selected">{{c.name}}</option>
+	      
 					{% else %}
-						<option value="{{c.id}}">{{c.name}}</option>
+						
+	      <option value="{{c.id}}">{{c.name}}</option>
+	      
 					{% endif %}
 				{% endfor %}
-			</select>
-		</p>
-		<p><label for="desc" class="label">Description</label><textarea name="desc" id="desc" class="field">{{doctor.desc}}</textarea></p>
-		
-
-	<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
+			
+        </select></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="desc" class="label">Description</label></td>
+	    <td><textarea name="desc" id="desc" class="field">{{doctor.desc}}</textarea></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title">&nbsp;</td>
+	    <td style="padding-left:20px"><span class="text_right">
+	      <input type="submit" value="Save"/>
+	      &nbsp;&nbsp;
+	      <input type="reset" value="Reset"/>
+	    </span></td>
+	    <td>&nbsp;</td>
+      </tr>
+  </table>
 </form>
 		
 {% endblock %}

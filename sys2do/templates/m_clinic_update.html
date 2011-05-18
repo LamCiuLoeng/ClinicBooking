@@ -72,14 +72,60 @@
 	<input type="hidden" name="lat" id="lat" value="{{clinic.location[0]}}"/>
 	<input type="hidden" name="lng" id="lng" value="{{clinic.location[1]}}"/>
 
-		<p><label for="name" class="label">Clinic Name</label><input type="text" name="name" id="name" value="{{clinic.name|ifFalse('')}}" class="field"/></p>
-		<p><label for="website" class="label">Website</label><input type="text" name="website" id="website" value="{{clinic.website|ifFalse('')}}" class="field"/></p>
-		<p><label for="address" class="label">Address</label><textarea name="address" id="address" class="field">{{clinic.address|ifFalse('')}}</textarea></p>
-		<p><label for="desc" class="label">Description</label><textarea name="desc" id="desc" class="field">{{clinic.desc|ifFalse('')}}</textarea></p>
-		<p><label for="image_url" class="label">Image</label><input type="file" name="image_url" class="field"/></p>		
-		<p><label for="location" class="label">Location</label><div id="gmap" style="width:500px;height:300px;margin-left:200px;"></div></p>
-
-	<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td width="130">&nbsp;</td>
+	    <td width="150" align="right" class="input_left_title">Clinic Name</td>
+	    <td><input type="text" name="name" id="name" value="{{clinic.name|ifFalse('')}}" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title">Website</td>
+	    <td><input type="text" name="website" id="website" value="{{clinic.website|ifFalse('')}}" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title">Address</td>
+	    <td><textarea name="address" id="address" class="field">{{clinic.address|ifFalse('')}}</textarea></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title">Description</td>
+	    <td><textarea name="desc" id="desc" class="field">{{clinic.desc|ifFalse('')}}</textarea></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title">Image</td>
+	    <td><input type="file" name="image_url" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td valign="middle">&nbsp;</td>
+	    <td align="right" class="input_left_title">Location</td>
+	    <td><div id="gmap" style="width:500px;height:300px;margin-left:20px; border:#666 solid 6px"></div></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td style="padding-left:20px"><span class="text_right">
+	      <input type="submit" value="Save"/>
+	      &nbsp;&nbsp;
+	      <input type="reset" value="Reset"/>
+	    </span></td>
+	    <td>&nbsp;</td>
+      </tr>
+  </table>
 </form>
 		
 {% endblock %}

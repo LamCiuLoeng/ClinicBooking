@@ -31,8 +31,9 @@
 {% block content %}
 
 	{% for c in clinics %}
-		<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10">
-			<img src="{{c.image_url}}" class="obj_left" style="margin:10px;">
+		<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10 clinic_div">
+        	<img src="/static/images/zstp.jpg" width="300px" height="200px" class="obj_right" style="margin-right:15px; border:#000 solid 1px"  />
+			<!-- <img src="{{c.image_url}}" class="obj_left" style="margin:10px;">  -->
 			<div id="gmap_div_{{c.id}}" class="obj_right blackborder right_margin_10" style="width:300px;height:200px;"></div>
 			<h2>{{c.name}}</h2>
 			<p>{{c.desc}}</p>

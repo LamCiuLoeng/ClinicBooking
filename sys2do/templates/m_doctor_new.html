@@ -51,43 +51,113 @@
 {% block content %}
 <form action="/m_doctor_save" method="post" enctype="multipart/form-data" class="baseform">
 	<input type="hidden" name="action_type" value="NEW"/>
-
-
-		<p><label for="email" class="label">E-mail</label><input type="text" name="email" id="email" class="field"/></p>
-		<p><label for="password" class="label">Password</label><input type="password" name="password" id="password" class="field"/></p>
-		<p><label for="repassword" class="label">Confirmed Password</label><input type="password" name="repassword" id="repassword" class="field"/></p>
-		<p><label for="first_name" class="label">First Name</label><input type="text" name="first_name" id="first_name" class="field"/></p>
-		<p><label for="last_name" class="label">Last Name</label><input type="text" name="last_name" id="last_name" class="field"/></p>
-		<p><label for="phone" class="label">Phone</label><input type="text" name="phone" id="phone" class="field"/></p>
-		<p><label for="image_url" class="label">Image</label><input type="file" name="image_url" class="field"/></p>
-		<p>
-			<label for="clinic" class="label">Belong to Clinic</label>
-			<select name="clinic" multiple="true" class="field">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td width="130">&nbsp;</td>
+	    <td width="150" align="right" class="input_left_title"><label for="email3" class="label">E-mail</label></td>
+	    <td><input type="text" name="email" id="email" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="password2" class="label">Password</label></td>
+	    <td><input type="password" name="password" id="password" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="repassword2" class="label">Confirmed Password</label></td>
+	    <td><input type="password" name="repassword" id="repassword" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="first_name3" class="label">First Name</label></td>
+	    <td><input type="text" name="first_name" id="first_name" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="last_name3" class="label">Last Name</label></td>
+	    <td><input type="text" name="last_name" id="last_name" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="phone3" class="label">Phone</label></td>
+	    <td><input type="text" name="phone" id="phone" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="image_url3" class="label">Image</label></td>
+	    <td><input type="file" name="image_url" class="field"/></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="clinic3" class="label">Belong to Clinic</label></td>
+	    <td><select name="clinic" multiple="multiple" class="field">
+	      
+		  
 				{% for c in clinics %}
-					<option value="{{c.id}}">{{c.name}}</option>
+					
+	      <option value="{{c.id}}">{{c.name}}</option>
+	      
 				{% endfor %}
-			</select>
-		</p>	
-		<p>
-			<label class="label">Avaiable Days</label>
-			<span style="margin-left:20px">
-			{% for i in ['MON','TUE','WED','THU','FRI','SAT','SUN']%}
-				<input type="checkbox" name="avaiable_day" value="{{loop.index}}"/>&nbsp;{{i}}
-			{% endfor %}
-			</span>
-		</p>
-		<p><label for="qty" class="label">Schedule</label><span style="margin-left:20px">Book <input type="text" name="qty" id="qty" value="10"/> persons per day</span></p>
-		<p>
-			<label for="category" class="label">Category</label>
-			<select name="category" multiple="true" class="field">
+			
+        </select></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label class="label">Avaiable Days</label></td>
+	    <td><span style="margin-left:20px"> {% for i in ['MON','TUE','WED','THU','FRI','SAT','SUN']%}
+            <input type="checkbox" name="avaiable_day" value="{{loop.index}}"/>
+            &nbsp;{{i}}
+		{% endfor %} </span></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="qty3" class="label">Schedule</label></td>
+	    <td><span style="margin-left:20px">Book
+            <input type="text" name="qty" id="qty" value="10"/>
+persons per day</span></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="category3" class="label">Category</label></td>
+	    <td><select name="category" multiple="multiple" class="field">
+	      
+		  
 				{% for c in categories%}
-					<option value="{{c.id}}">{{c.name}}</option>
+					
+	      <option value="{{c.id}}">{{c.name}}</option>
+	      
 				{% endfor %}
-			</select>
-		</p>
-		<p><label for="desc" class="label">Description</label><textarea name="desc" id="desc" class="field"></textarea></p>
-
-	<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
+			
+        </select></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title"><label for="desc3" class="label">Description</label></td>
+	    <td><textarea name="desc" id="desc" class="field"></textarea></td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td align="right" class="input_left_title">&nbsp;</td>
+	    <td  style="padding-left:20px"><span class="text_right">
+	      <input type="submit" value="Save"/>
+	      &nbsp;&nbsp;
+	      <input type="reset" value="Reset"/>
+	    </span></td>
+	    <td>&nbsp;</td>
+      </tr>
+  </table>
 </form>
 		
 {% endblock %}

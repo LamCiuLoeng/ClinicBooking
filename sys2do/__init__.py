@@ -73,6 +73,7 @@ app.add_url_rule("/m_nurse", view_func = m.m_nurse_list)
 app.add_url_rule("/m_nurse_update", view_func = m.m_nurse_update)
 app.add_url_rule("/m_nurse_save", view_func = m.m_nurse_save, methods = ['POST'])
 app.add_url_rule("/m_user", view_func = m.m_user_list)
+app.add_url_rule("/m_user_update", view_func = m.m_user_update)
 app.add_url_rule("/m_events_list", view_func = m.m_events_list)
 app.add_url_rule("/m_events_update", view_func = m.m_events_update)
 
@@ -82,3 +83,6 @@ app.add_url_rule("/m_events_update", view_func = m.m_events_update)
 #===============================================================================
 import util.filters as filters
 for f in filters.__all__ : app.jinja_env.filters[f] = getattr(filters, f)
+
+import util.tests as tests
+for t in tests.__all__ : app.jinja_env.tests[t] = getattr(tests, t)

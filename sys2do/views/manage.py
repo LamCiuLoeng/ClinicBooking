@@ -370,12 +370,41 @@ def m_nurse_save():
 
 
 @login_required
+@templated("m_user_list.html")
 def m_user_list():
-    pass
+#    users = connection.User.find({"id":{"$in":r.users}})
+#    return {"users" : users}
+
+    try:
+        page = request.values.get("page", 1)
+    except:
+        page = 1
+
+    r = connection.Role.one({"name" : "NORMALUSER"})
+    users = list(connection.User.find({"id":{"$in":r.users}}))
+    paginate_users = Page(users, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_user_list"), page))
+    return { "paginate_users" : paginate_users}
+
 
 @login_required
 def m_user_update():
-    pass
+    id = _g("id")
+    redirect_url = url_for("m_user_list")
+    if not id :
+        flash("No id supplied !", MESSAGE_ERROR)
+        return redirect(redirect_url)
+    action_type = _g("action_type")
+    if not action_type in ["v", "c"]:
+        flash("No such action !", MESSAGE_ERROR)
+        return redirect(redirect_url)
+    u = connection.User.one({"id" : int(id)})
+
+    if action_type == "v":
+        return render_template("m_user_view.html", user = u)
+    elif action_type == "c": #cancel
+        u.active = 1
+        e.save()
+        return jsonify({"success" : True, "message" : "Update successfully !"})
 
 
 

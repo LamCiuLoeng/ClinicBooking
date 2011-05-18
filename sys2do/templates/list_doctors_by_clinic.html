@@ -25,20 +25,22 @@
 
 
 {% block content %}
-	<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10">
-		<img src="{{clinic.image_url}}" class="obj_left" style="margin:10px;"/>
+	<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10 clinic_div">
+		<img src="/static/images/zstp.jpg" width="300px" height="200px" class="obj_right" style="margin-right:15px; border:#000 solid 1px"  />
+		<!-- <img src="{{clinic.image_url}}" class="obj_left" style="margin:10px;"/> -->
 		<div id="gmap_div" class="obj_right blackborder right_margin_10" style="width:300px;height:200px;"></div>
 		<h4>{{clinic.name}}</h4>
 		<div class="left_margin_10">{{clinic.desc}}</div>
 	</div>
 	{% for d in doctors %}
-		<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10">
+		<div class="fivesixth last bottom_margin_20 blackborder_dotted vpad_10 clinic_div">
 			{% set profile = d.getUserProfile() %}
 			{% if not profile.image_url %}
 				<img src="/static/images/no_images.jpg" class="obj_left left_margin_10"/>
 			{% else %}
 				<img src="{{profile.getImage().url}}" class="obj_left left_margin_10"/>
 			{% endif %}
+			
 			<h3>{{d['name']}}</h3>
 			<p>{{d['desc']}}</p>
 			<p><a href="/schedule?id={{d.id}}">Check the doctor's schedule</a></p>
