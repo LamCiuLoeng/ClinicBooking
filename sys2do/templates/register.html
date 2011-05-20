@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	
-	<title>Easy Booking - Register</title>
+	<title>IEASYBOOK - Register</title>
 	
 	
 	<link href="{{url_for('.static', filename='css/reset.css')}}" rel="stylesheet" type="text/css" />
@@ -74,13 +74,14 @@
 <body>
 	<div id="container" class="outter round_10">
 		{% block header %}
-			<div id="header" class="full">
-				<a href="/index"><img src="/static/images/lg_logo.jpg" /></a>
+			<div id="header" class="full" style="background:url(/static/images/top_bg.jpg); background-repeat:no-repeat; height:120px; margin:10px 0px 0px 10px;">
+				<!--<a href="/index"><img src="/static/images/lg_logo.jpg" /></a> -->
 			</div>
 		{% endblock %}
 	
 		{% block main %}
 			<div id="main_content" class="full vpad_10 height_500">
+				<h1>Register</h1>
 				{% block content %}
 					<form action="/save_register" method="post" class="baseform">
 						<p><label for="email" class="label">E-mail</label><input type="text" name="email" id="email" class="required field"/><span id="emai_tip"/></span></p>
