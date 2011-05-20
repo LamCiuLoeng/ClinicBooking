@@ -77,9 +77,9 @@
 <body>
 	<div id="container" class="outter round_10">
 		{% block header %}
-			<div id="header" class="full">
-				<a href="/index"><img src="/static/images/lg_logo.jpg" /></a>
-				<p class="obj_right top_margin_10">Welcome, <a href="/profile">{{session['user_profile']['name']}}</a> | <a href="/logout_handler">Logout</a></p>
+			<div id="header" class="full" style="background:url(/static/images/top_bg.jpg); background-repeat:no-repeat; height:120px; margin:10px 0px 0px 10px;">
+				<!--a href="/index"><img src="/static/images/lg_logo.jpg" /></a-->
+				<p class="obj_right top_margin_10 right_margin_10" style="color:white;">Welcome, <a href="/profile" style="color:white;">{{session['user_profile']['name']}}</a> | <a href="/logout_handler" style="color:white;">Logout</a></p>
 				<div class="clear"></div>
 			</div>
 		{% endblock %}
@@ -88,14 +88,26 @@
 			<div class="full">
 				<div id="tabs" class="round_5">
 					<ul>
+						{% if ['NORMALUSER'] is in_any_roles%}
 						<li id="{{'current' if current_tab == 't1' or current_tab is undefined else ''}}"><a href="{{url_for('list_clinic')}}"><span>Go Booking</span></a></li>
 						<li id="{{'current' if current_tab == 't2' else ''}}"><a href="{{url_for('my_booking')}}"><span>My Booking</span></a></li>
 						<li id="{{'current' if current_tab == 't3' else ''}}"><a href="{{url_for('my_message')}}"><span>Message</span></a></li>
+						{% endif %}
+						
+						
+						{% if ['ADMINISTRATOR','CLINIC_MANAGER'] is in_any_roles%}
 						<li id="{{'current' if current_tab == 't4' else ''}}"><a href="{{url_for('m_clinic_list')}}"><span>Clinic</span></a></li>
 						<li id="{{'current' if current_tab == 't5' else ''}}"><a href="{{url_for('m_doctor_list')}}"><span>Doctor</span></a></li>
 						<li id="{{'current' if current_tab == 't6' else ''}}"><a href="{{url_for('m_nurse_list')}}"><span>Nurse</span></a></li>
+						{% endif %}
+						
+						{% if ['ADMINISTRATOR'] is in_all_roles%}
 						<li id="{{'current' if current_tab == 't7' else ''}}"><a href="{{url_for('m_user_list')}}"><span>User</span></a></li>
+						{% endif %}
+						
+						{% if ['ADMINISTRATOR','DOCTOR','NURSE','CLINIC_MANAGER'] is in_any_roles%}
 						<li id="{{'current' if current_tab == 't8' else ''}}"><a href="{{url_for('m_events_list')}}"><span>Booking</span></a></li>
+						{% endif %}
 					</ul>
 					<div class=" obj_right">
 					  <table width="230" border="0" cellspacing="0" cellpadding="0">
@@ -117,7 +129,7 @@
 		{% endblock %}
 		
 		{% block footer %}
-			<div id="footer" class="full bg_lightblue bottom_margin_10"><p style="text-align:center" class="footer_p">Powered by E-solutions</p></div>
+			<div id="footer" class="full bg_lightblue bottom_margin_10"><p class="text_center footer_p">Powered by E-solutions</p></div>
 		{% endblock %}
 	</div>
 </body>

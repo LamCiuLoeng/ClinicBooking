@@ -49,19 +49,21 @@
 {% endblock %}
 
 {% block content %}
-		<p>
-			{% if not user.image_url %}
-				<img src="/static/images/no_images.jpg" class="obj_left left_margin_10"/>
-			{% else %}
-				<img src="{{user.getImage().url}}" class="obj_left left_margin_10"/>
-			{% endif %}
-		</p>	
-		
-		<br class="clear"/>
-		<p><label for="email" class="label">E-mail</label>{{user.email}}</p>		
-		<p><label for="first_name" class="label">First Name</label>{{user.first_name}}</p>
-		<p><label for="last_name" class="label">Last Name</label>{{user.last_name}}</p>
-		<p><label for="phone" class="label">Phone</label>{{user.phone}}</p>
-		<p><label for="birthday" class="label">Birthday</label>{{user.birthday}}</p>
+		<div class="baseform">
+			<p>
+				{% if not user.image_url %}
+					<img src="/static/images/no_images.jpg" class="left_margin_10"/>
+				{% else %}
+					<img src="{{user.getImage().url}}" class="left_margin_10"/>
+				{% endif %}
+			</p>	
+			
+			<br class="clear"/>
+			<p><label for="email" class="label">E-mail</label><span class="field">{{user.email}}</span></p>		
+			<p><label for="first_name" class="label">First Name</label><span class="field">{{user.first_name}}</span></p>
+			<p><label for="last_name" class="label">Last Name</label><span class="field">{{user.last_name}}</span></p>
+			<p><label for="phone" class="label">Phone</label><span class="field">{{user.phone}}</span></p>
+			<p><label for="birthday" class="label">Birthday</label><span class="field">{{user.birthday}}</span></p>
+		</div>
 		
 {% endblock %}

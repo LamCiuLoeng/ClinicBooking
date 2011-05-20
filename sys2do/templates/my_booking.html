@@ -16,8 +16,8 @@
 <tbody>
 	{% for e in events.items%}
 	<tr>
-        <th scope="row">{{e.date}}</th>
-        <td>{{e.did}}</td>
+        <th scope="row">{{e.date|string2Date}}</th>
+        <td>{{e.did|getByID("DoctorProfile","name")}}</td>
         <td>{{e.remark}}</td>
         <td>{{e.showStatus()}}</td>
 	</tr>

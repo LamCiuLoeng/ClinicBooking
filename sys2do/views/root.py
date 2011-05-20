@@ -47,6 +47,7 @@ def login_handler():
                 permissions.add(connection.Permission.one({"id" : pid}).name)
         session['user_profile']['roles'] = roles
         session['user_profile']['permissions'] = permissions
+        app.logger.info("*********** permission")
         app.logger.info(roles)
         app.logger.info(permissions)
         if next:  return redirect(next)

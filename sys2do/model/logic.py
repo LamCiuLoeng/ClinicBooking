@@ -129,6 +129,10 @@ class DoctorProfile(Abstract):
     def getUserProfile(self):
         return connection.User.one({"id" : self.uid})
 
+    @property
+    def name(self):
+        return str(connection.User.one({"id" : self.uid}))
+
 @connection.register
 class NurseProfile(Abstract):
     __collection__ = 'NURSEPROFILE'
