@@ -95,14 +95,35 @@ class DoctorProfile(Abstract):
         'desc':unicode,
         'category':[int],
         'clinic':[int],
-        'avaiable_day' : [int],
-        'qty' : int
+#        'avaiable_day' : [int],
+        'qty' : int,
+        'worktime_setting' : {
+                              "MONDAY" : [(unicode, unicode), ],
+                              "TUESDAY" : [(unicode, unicode), ],
+                              "WEDNESDAY" : [(unicode, unicode), ],
+                              "THURSDAY" : [(unicode, unicode), ],
+                              "FRIDAY" : [(unicode, unicode), ],
+                              "SATURDAY" : [(unicode, unicode), ],
+                              "SUNDAY" : [(unicode, unicode), ],
+                              "HOLIDAY" : [(unicode, unicode), ],
+                              "SPECIAL" : [unicode],
+                              }
     }
 
     required_fields = ['uid']
     default_values = {'create_time':datetime.datetime.now(),
                       'qty' : 10,
-                      'avaiable_day' : range(1, 6),
+                      'worktime_setting' : {
+                              "MONDAY" : [[u"9:00", u"18:00"], ],
+                              "TUESDAY" : [[u"9:00", u"18:00"], ],
+                              "WEDNESDAY" : [[u"9:00", u"18:00"], ],
+                              "THURSDAY" : [[u"9:00", u"18:00"], ],
+                              "FRIDAY" : [[u"9:00", u"18:00"], ],
+                              "SATURDAY" : [[u"9:00", u"18:00"], ],
+                              "SUNDAY" : [[u"9:00", u"18:00"], ],
+                              "HOLIDAY" : [[u"9:00", u"18:00"], ],
+                              "SPECIAL" : [],
+                              },
                       'clinic' : []}
 
     validators = {
@@ -121,7 +142,7 @@ class DoctorProfile(Abstract):
                        'uid' : u.id,
                        'desc' : self.desc,
                        'qty' : self.qty,
-                       'avaiable_day' : self.avaiable_day
+                       'worktime_setting' : self.worktime_setting
                        }
         user_info.update(doctor_info)
         return user_info

@@ -441,8 +441,23 @@ def m_events_update():
     elif action_type == "c": #cancel
         e.status = 2
         e.save()
+        msg = connection.Message()
+        msg.id = msg.getID()
+        msg.subject = u"Cancel Booking Event"
+        msg.content = u"%s cancel the booking request." % session['user_profile']['name']
+        msg.uid = e.uid
+        msg.save()
         return jsonify({"success" : True, "message" : "Update successfully !"})
     elif action_type == "p": #confirmed
         e.status = 1
         e.save()
+        msg = connection.Message()
+        msg.id = msg.getID()
+        msg.subject = u"Confirm Booking Event"
+        msg.content = u"%s confirm the booking request." % session['user_profile']['name']
+        msg.uid = e.uid
+        msg.save()
         return jsonify({"success" : True, "message" : "Update successfully !"})
+
+
+

@@ -5,6 +5,15 @@
 {% block extJS %}
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
+	function addTime(obj){
+		
+	}
+	
+	function removeTime(obj){
+		var t = $(obj);
+		$(t.parents(".time_span")[0]).remove();
+	}
+
 	$(document).ready(function(){
 			
 		$("form").submit(function(){
@@ -112,10 +121,27 @@
 	  <tr>
 	    <td>&nbsp;</td>
 	    <td align="right" class="input_left_title"><label class="label">Avaiable Days</label></td>
-	    <td><span style="margin-left:20px"> {% for i in ['MON','TUE','WED','THU','FRI','SAT','SUN']%}
-            <input type="checkbox" name="avaiable_day" value="{{loop.index}}"/>
-            &nbsp;{{i}}
-		{% endfor %} </span></td>
+	    <td>
+		
+			<div>
+				{%for day in ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY","HOLIDAY"]%}
+					<div>
+						<span>{{day}}</span><input type="button" value="+" ref="{{day}}" onclick="addTime(this)"/>
+						<div>
+							{%for (begin_time,end_time) in c.worktime_setting[day]%}
+								<div style="display:inline;margin-right:10px;" class="time_span">
+									<span>{{begin_time}} - {{end_time}}</span>|<a href="#" onclick="removeTime(this)">X</a>
+									<input type="hidden" name="begin_time_{{day}}" value="begin_time"/>
+									<input type="hidden" name="end_time_{{day}}" value="end_time"/>
+								</div>
+							{%endfor%}
+						</div>
+					</div>
+					<br />
+				{%endfor%}
+			</div>
+		
+		</td>
 	    <td>&nbsp;</td>
       </tr>
 	  <tr>

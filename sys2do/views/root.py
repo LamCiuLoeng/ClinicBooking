@@ -12,6 +12,9 @@ from sys2do.util.decorator import templated, login_required, has_all_permissions
 from sys2do.util.common import _g, MESSAGE_ERROR, MESSAGE_INFO, upload
 from sys2do.setting import UPLOAD_FOLDER, ALLOWED_EXTENSIONS, UPLOAD_FOLDER_URL
 
+
+
+
 @login_required
 @templated("index.html")
 def index():
@@ -52,6 +55,7 @@ def login_handler():
                 permissions.add(connection.Permission.one({"id" : pid}).name)
         session['user_profile']['roles'] = roles
         session['user_profile']['permissions'] = permissions
+#        session.permanent = True
         app.logger.info("*********** permission")
         app.logger.info(roles)
         app.logger.info(permissions)

@@ -195,6 +195,17 @@ def init():
     d1.uid = users_mapping["d1@aa.com"].id
     d1.desc = u"I'm temp 1 doctor."
     d1.clinic = [clinic_mapping["Clinic 1"].id]
+    d1.worktime_setting = {
+                              "MONDAY" : [[u"9:00", u"12:00"], [u"13:00", u"18:00"] ],
+                              "TUESDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "WEDNESDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "THURSDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "FRIDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "SATURDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "SUNDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "HOLIDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "SPECIAL" : [],
+                              }
     d1.save()
 
     d2 = connection.DoctorProfile()
@@ -202,6 +213,17 @@ def init():
     d2.uid = users_mapping["d2@aa.com"].id
     d2.desc = u"I'm temp 2 doctor."
     d2.clinic = [clinic_mapping["Clinic 2"].id]
+    d2.worktime_setting = {
+                              "MONDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "TUESDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "WEDNESDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "THURSDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "FRIDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "SATURDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "SUNDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "HOLIDAY" : [[u"9:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "SPECIAL" : [],
+                              }
     d2.save()
 
     n1 = connection.NurseProfile()
