@@ -31,7 +31,7 @@ def _allowedFile(filename):
 
 
 def upload(name):
-    f = request.files[name]
+    f = request.files.get(name, None)
     if not f : raise makeException("No file upload!")
     if _allowedFile(f.filename):
         if not os.path.exists(UPLOAD_FOLDER) : os.makedirs(UPLOAD_FOLDER)

@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import traceback
+from PIL import Image
+import os
+from datetime import datetime as dt
 from flask import g, render_template, flash, session, redirect, url_for, request
 
 from sys2do import app
@@ -6,6 +10,7 @@ from sys2do.model import connection
 from flask.helpers import jsonify
 from sys2do.util.decorator import templated, login_required, has_all_permissions
 from sys2do.util.common import _g, MESSAGE_ERROR, MESSAGE_INFO, upload
+from sys2do.setting import UPLOAD_FOLDER, ALLOWED_EXTENSIONS, UPLOAD_FOLDER_URL
 
 @login_required
 @templated("index.html")
@@ -168,6 +173,94 @@ def save_password():
     u.save()
     flash("Update the password successfully !", MESSAGE_INFO)
     return redirect(url_for("change_password"))
+
+
+
+
+@login_required
+@templated("thumbnail.html")
+def thumbnail():
+    id = session['user_profile']["id"]
+    u = connection.User.one({"id" : int(id)})
+
+    image = u.getImage()
+    if image:
+        f = Image.open(image.path)
+        data = {
+                "image_id" : image.id,
+                "image_url" : image.url,
+                "image_size" : f.size,
+                }
+#        f.close()
+        return {"data" : data}
+    else:
+        return {"data" : {}}
+
+
+
+@login_required
+@templated("thumbnail.html")
+def ajax_thumbnail_file():
+    try:
+        f = upload("fileToUpload")
+        i = Image.open(f.path)
+        data = {
+                "image_id" : f.id,
+                "image_url" : f.url,
+                "image_size" : i.size,
+                }
+#        i.close()
+        return {"data" : data}
+    except:
+        app.logger.error(traceback.format_exc())
+        return {"data" : {}}
+
+
+@login_required
+def trumbnail_save():
+    image_id = request.values.get("image_id", None)
+    if not image_id:
+        flash("No image upload", MESSAGE_ERROR)
+        return redirect(url_for("thumbnail"))
+
+    left = request.values.get("x1", None)
+    top = request.values.get("y1", None)
+    right = request.values.get("x2", None)
+    bottom = request.values.get("y2", None)
+
+    if not all([left, top, right, bottom]):
+        flash("No all the params supplied", MESSAGE_ERROR)
+        return redirect(url_for("thumbnail"))
+
+    left, top, right, bottom = map(int, (left, top, right, bottom))
+
+
+    infile = connection.UploadFile.one({"id" : int(image_id)})
+    outfile = connection.UploadFile()
+
+    outfile.id = outfile.getID()
+    outfile.name = infile.name
+    outfile.uid = session['user_profile']["id"]
+
+    new_file_name = "%s%s" % (dt.now().strftime("%Y%m%d%H%M%S"), os.path.splitext(infile.path)[1])
+    outfile.path = os.path.join(UPLOAD_FOLDER, new_file_name)
+    outfile.url = "/".join([UPLOAD_FOLDER_URL, new_file_name])
+    outfile.save()
+
+
+
+    im = Image.open(infile.path)
+    thumbnail = im.crop((left, top, right, bottom))
+    thumbnail.save(outfile.path)
+
+    id = session['user_profile']["id"]
+    u = connection.User.one({"id" : int(id)})
+    u.image_url = outfile.id
+    u.save()
+
+    flash("Upldate the profile successfully!")
+    return redirect(url_for("profile"))
+
 
 @has_all_permissions(["ORDER_ADD"])
 @templated("index.html")

@@ -52,6 +52,12 @@ app.add_url_rule("/profile", view_func = r.profile)
 app.add_url_rule("/save_profile", view_func = r.save_profile, methods = ['POST'])
 app.add_url_rule("/change_password", view_func = r.change_password)
 app.add_url_rule("/save_password", view_func = r.save_password, methods = ['POST'])
+app.add_url_rule("/thumbnail", view_func = r.thumbnail)
+app.add_url_rule("/ajax_thumbnail_file", view_func = r.ajax_thumbnail_file, methods = ['POST'])
+app.add_url_rule("/trumbnail_save", view_func = r.trumbnail_save, methods = ['POST'])
+
+
+
 
 import views.action as a
 app.add_url_rule("/list_clinic", view_func = a.list_clinic)

@@ -4,9 +4,9 @@
 {% block content %}
 <form action="/save_profile" method="post" enctype="multipart/form-data" class="baseform">
 	{% if user.image_url %}
-		<p><img src="{{user.getImage().url}}"/></p>
+		<p><a href="/thumbnail"><img src="{{user.getImage().url}}"/></a></p>
 	{% else %}
-		<p><img src="/static/images/no_images.jpg"/></p>
+		<p><a href="/thumbnail"><img src="/static/images/no_images.jpg"/></a></p>
 	{% endif %}
 	<p><a href="/change_password">Change Password</a></p>
 	<p><label for="email" class="label">E-mail</label><span class="field">{{user.email}}</span></p>

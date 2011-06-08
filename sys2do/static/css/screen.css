@@ -65,6 +65,18 @@ body{
 	font-family:"Arial Black", Gadget, sans-serif;
 	color:#fff;
 }
+a.login_top:link{
+	color:#FF6;
+}
+a.login_top:visited{
+	color:#FF6;
+}
+a.login_top:hover{
+	color:#0FF;
+}
+a.login_top:active{
+	color:#0FF;
+}
 /*--------------------jerry.yu----------------------*/
 
 /*- Menu Tabs--------------------------- */
