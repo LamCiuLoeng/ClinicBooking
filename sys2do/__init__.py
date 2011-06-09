@@ -64,9 +64,14 @@ app.add_url_rule("/list_clinic", view_func = a.list_clinic)
 app.add_url_rule("/list_doctors", view_func = a.list_doctors)
 app.add_url_rule("/list_doctors_by_clinic", view_func = a.list_doctors_by_clinic)
 app.add_url_rule("/schedule", view_func = a.schedule)
+app.add_url_rule("/get_date_info", view_func = a.get_date_info, methods = ['GET', 'POST'])
 app.add_url_rule("/save_events", view_func = a.save_events, methods = ['GET', 'POST'])
 app.add_url_rule("/my_booking", view_func = a.my_booking, methods = ['GET', 'POST'])
 app.add_url_rule("/my_message", view_func = a.my_message, methods = ['GET', 'POST'])
+
+
+
+
 
 import views.manage as m
 app.add_url_rule("/m_clinic", view_func = m.m_clinic_list)

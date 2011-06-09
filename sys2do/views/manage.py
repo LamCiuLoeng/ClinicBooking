@@ -195,14 +195,21 @@ def m_doctor_save():
         d.id = d.getID()
         d.uid = u.id
         d.desc = _g("desc")
-        d.qty = int(_g("qty"))  if _g("qty") else 10
+#        d.qty = int(_g("qty"))  if _g("qty") else 10
         #map the relation 
         d.category = map(int, _gl("category"))
         for c in d.category : connection.Category.one({'id':c}).doctors.append(d.id)
         d.clinic = map(int, _gl("clinic"))
         for c in d.clinic: connection.Clinic.one({"id":c}).doctors.append(d.id)
 
-        d.avaiable_day = map(int, _gl("avaiable_day"))
+#        d.avaiable_day = map(int, _gl("avaiable_day"))
+        for day in ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY", "HOLIDAY"]:
+            app.logger.info(request.form.getlist("time_" + day))
+            ts = [map(lambda v : ("0" + v)[-5:], t.split("|")) for t in request.form.getlist("time_" + day)]
+            ts.sort(cmp = lambda a, b:cmp(a[0], b[0]))
+            app.logger.info(ts)
+            d.worktime_setting[day] = ts
+
         d.save()
         flash("Save the new doctor successfully!", MESSAGE_INFO)
         return redirect(url_for("m_doctor_list"))
@@ -220,7 +227,14 @@ def m_doctor_save():
         d.clinic = map(int, _gl("clinic"))
         for c in d.clinic: connection.Clinic.one({"id":c}).doctors.append(d.id)
 
-        d.avaiable_day = map(int, _gl("avaiable_day"))
+        for day in ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY", "HOLIDAY"]:
+            app.logger.info(request.form.getlist("time_" + day))
+            ts = [map(lambda v : ("0" + v)[-5:], t.split("|")) for t in request.form.getlist("time_" + day)]
+            ts.sort(cmp = lambda a, b:cmp(a[0], b[0]))
+            app.logger.info(ts)
+            d.worktime_setting[day] = ts
+
+#        d.avaiable_day = map(int, _gl("avaiable_day"))
         d.save()
         u = connection.User.one({'id' : d.uid})
         u.email = _g("email")

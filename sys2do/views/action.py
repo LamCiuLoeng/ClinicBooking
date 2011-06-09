@@ -76,6 +76,8 @@ def schedule():
             events[b.date] = [b]
 
     s = []
+
+    days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
     for d in calendar.Calendar().itermonthdates(year, month):
         info = {
                 "date" : d,
@@ -95,17 +97,67 @@ def schedule():
                 info['is_booked'] = False
 
 
-            if len(info['events']) >= dp.qty:
-                info['avaiable'] = False
-                if len(info['events']) == dp.qty : info['full'] = True
-            elif d.weekday() not in dp.avaiable_day:
-                info['avaiable'] = False
-            elif d < dt.today().date():
+#            if len(info['events']) >= dp.qty:
+#                info['avaiable'] = False
+#                if len(info['events']) == dp.qty : info['full'] = True
+#            elif d.weekday() not in dp.avaiable_day:
+#                info['avaiable'] = False
+#            elif d < dt.today().date():
+#                info['avaiable'] = False
+#            else:
+#                info['avaiable'] = True
+
+
+            if d < dt.today().date():
                 info['avaiable'] = False
             else:
-                info['avaiable'] = True
+                ws = dp.worktime_setting[days[d.weekday()]]
+                info['avaiable'] = len(ws) > 0
+
         s.append(info)
     return render_template("/schedule.html", schedule = s, doctor = dp, current = current, pre = pre, next = next)
+
+
+
+@login_required
+def get_date_info():
+    pdate = request.values.get("pdate", None)
+    pdoctor = request.values.get("pdoctor", None)
+    if not pdate or not pdoctor:
+        return jsonify({"success" : False, "message" : "No date or doctor supplied!"})
+
+    doctor = connection.DoctorProfile.one({"id" : int(pdoctor)})
+    require_date = dt.strptime(pdate, "%Y%m%d")
+
+    day = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"][require_date.weekday()]
+    time_spans = {}
+    for [begin, end] in doctor.worktime_setting[day]:
+        bHour, bEnd = begin.split(":")
+        eHour, eEnd = end.split(":")
+
+        if bHour == eHour:
+            time_spans[bHour] = [begin, end, 0]
+        else:
+            h1 = int(bHour)
+            h2 = int(eHour)
+            for h in range(h1 + 1, h2):
+                time_spans[h] = [("0%d:00" % h)[-5:], ("0%d:00" % (h + 1))[-5:], 0]
+            if eEnd != "00":
+                time_spans[h2] = [("0%d:00" % h2)[-5:], end, 0]
+            time_spans[h1] = [begin, ("0%d:00" % (h1 + 1))[-5:], 0]
+
+
+    for e in connection.Events.find({"active":0, "did" : int(pdoctor), "date" : pdate}):
+        h, m = e.time.split(":")
+        if int(h) in time_spans:
+            time_spans[int(h)][2] += 1
+
+    return jsonify({
+                    "success" : True,
+                    "time_spans" : time_spans
+                    })
+
+
 
 
 
@@ -114,18 +166,22 @@ def save_events():
     uid = request.values.get("uid", None)
     did = request.values.get("did", None)
     d = request.values.get("d", None)
+    t = request.values.get("t", None)
 
-    if not uid or not did or not d:
+    if not uid or not did or not d or not t:
         return jsonify({
                         "success" : False,
                         "message" : "The required info is not supplied !"
                         })
+    format_date = lambda v : "-".join([v[:4], v[4:6], v[-2:]])
+
     try:
         e = connection.Events()
         e.id = e.getID()
         e.uid = int(uid)
         e.did = int(did)
         e.date = d
+        e.time = t
         e.remark = request.values.get("remark", None)
         e.save()
 
@@ -134,7 +190,7 @@ def save_events():
         m.id = m.getID()
         m.subject = u'Booking request submit'
         m.uid = session['user_profile']['id']
-        m.content = u'%s make a booking with doctor %s on %s' % (session['user_profile']['name'], doctor['name'], d)
+        m.content = u'%s make a booking with doctor %s at %s , %s.' % (session['user_profile']['name'], doctor['name'], t, format_date(d))
         m.save()
 
         return jsonify({

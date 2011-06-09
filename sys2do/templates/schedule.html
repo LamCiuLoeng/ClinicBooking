@@ -3,10 +3,17 @@
 {%set profile = doctor.getUserProfile() %}
 
 {% block extCSS %}
-
+<style type="text/css">
+	.time_span{
+		border : 1px solid #CCCCCC;
+		margin-top : 5px;
+	}
+</style>
 {% endblock %}
+
+
 {% block extJS %}
-<script src="{{url_for('.static', filename='js/jquery.raty.js')}}" type="text/javascript"></script>
+
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 
@@ -20,72 +27,95 @@
 			}
 		);
 		
-		
-		$('#star').raty({
-		  path : "/static/images/jquery_rate/",
-		  readOnly:  true,
-		  number : {{doctor.qty}},
-		  starOn : 'yz2.jpg',
-		  starOff : 'yz1.jpg',
-		  width : 450
-		});
-		
 		var current_div = null;
 		$(".cal_enable").click(function(){
-			current_div = $(this);
-			$.fn.raty.start(parseInt($("input[name='booked']",current_div).val()),"#star");
-
-			$("#notice").text("There are "+ $("input[name='booked']",current_div).val()  +" people book this doctor on this day." );
-			
-			$("#dialog-form").dialog({
-				width : 500,
-				//height : 350,
-			    modal : true,
-				close: function(event, ui){ $("#remark").val("") },
-				buttons:{
-					Save : function(){
-						var div = current_div;
-						var date = $("input[name='date']",div).val();
-						$.getJSON("/save_events",
-							{
-								"did" : {{doctor.id}},
-								"uid" : {{session['user_profile']['id']}},
-								"d"   : date,
-								"remark" : $("#remark").val()
-							},
-							function(r){
-								$("#dialog-form").dialog( "close" );
-								if(r.success){
-									div.addClass("cal_booked");
-									div.removeClass("cal_enable");
-									div.unbind("click");
-									div.unbind("mouseover");
-									$.pnotify({
-									    pnotify_title: "Notice",
-									    pnotify_text: 'Your request has submit successfully!',
-									    pnotify_nonblock: true,
-									    pnotify_mouse_reset: false,
-									    pnotify_opacity: .8,
-										pnotify_animation: 'show'
-									});
-								}else{
-									$.pnotify({
-									    pnotify_title: "Warning",
-									    pnotify_text: 'The service is not avaiable now ,please try it later !',
-									    pnotify_nonblock: true,
-									    pnotify_mouse_reset: false,
-										notify_mouse_reset: false,
-									    pnotify_opacity: .8,
-										pnotify_animation: 'show'
-									});
-								}
+			current_div = $(this);		
+					
+			$.getJSON(
+				"/get_date_info",
+				{
+					"pdate" : $("input[name='date']",current_div).val(),
+					"pdoctor" : {{doctor.id}}
+				},
+				function(r){
+					if(!r.success){
+						$.pnotify({
+						    pnotify_title: "Warning",
+						    pnotify_text: r.message,
+						    pnotify_nonblock: true,
+						    pnotify_mouse_reset: false,
+							notify_mouse_reset: false,
+						    pnotify_opacity: .8,
+							pnotify_animation: 'show'
 						});
-					},
-					Cancel: function() {
-						$(this).dialog( "close" );
+					}else{
+						$("#time_spans").html("");
+						for(t in r.time_spans){
+							var time_span = r.time_spans[t];
+							var html = '<div class="time_span"><input type="radio" name="time" value="'+ time_span[0]+'" /><span>'+ time_span[0] + ' ~ ' + time_span[1] +'</span>';
+							
+							for(var i=0;i<time_span[2];i++){
+								html += '<img src="/static/images/jquery_rate/yz2.jpg">';
+							}
+							
+							html += '</div>';
+							$("#time_spans").append(html);
+						}
+								
+							$("#dialog-form").dialog({
+								width : 500,
+								//height : 350,
+							    modal : true,
+								close: function(event, ui){ $("#remark").val("") },
+								buttons:{
+									Save : function(){
+										var div = current_div;
+										var date = $("input[name='date']",div).val();
+										$.getJSON("/save_events",
+											{
+												"did" : {{doctor.id}},
+												"uid" : {{session['user_profile']['id']}},
+												"d"   : date,
+												"t"   : $("#time_spans :checked").val(),
+												"remark" : $("#remark").val()
+											},
+											function(r){
+												$("#dialog-form").dialog( "close" );
+												if(r.success){
+													div.addClass("cal_booked");
+													div.removeClass("cal_enable");
+													div.unbind("click");
+													div.unbind("mouseover");
+													$.pnotify({
+													    pnotify_title: "Notice",
+													    pnotify_text: 'Your request has submit successfully!',
+													    pnotify_nonblock: true,
+													    pnotify_mouse_reset: false,
+													    pnotify_opacity: .8,
+														pnotify_animation: 'show'
+													});
+												}else{
+													$.pnotify({
+													    pnotify_title: "Warning",
+													    pnotify_text: 'The service is not avaiable now ,please try it later !',
+													    pnotify_nonblock: true,
+													    pnotify_mouse_reset: false,
+														notify_mouse_reset: false,
+													    pnotify_opacity: .8,
+														pnotify_animation: 'show'
+													});
+												}
+										});
+									},
+									Cancel: function() {
+										$(this).dialog( "close" );
+									}
+								}
+							});
+						
 					}
 				}
-			});
+			);			
 		});
 
 	});
@@ -138,9 +168,11 @@
 			</div>
 		</div>
 		
-		<div id="dialog-form" title="Create New Booking" style="display:none">
-			<p id="notice"></p>
-			<p id="star"></p>
-			<p><label>Remark</label><br /><textarea name="remark" id="remark" style="width:300px;height:70px;"></textarea></p>
+		<div id="dialog-form" title="Create New Booking Request" style="display:none">
+			<div id="time_spans"></div>
+			<div>
+				<label>Remark</label><br />
+				<textarea name="remark" id="remark" style="width:300px;height:70px;"></textarea>
+			</div>
 		</div>
 {% endblock %}

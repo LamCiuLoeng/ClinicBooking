@@ -2,20 +2,52 @@
 
 {% set current_tab = "t5" %}
 
+{% block extCSS %}
+<style type="text/css">
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
+.ui-timepicker-div dl{ text-align: left; }
+.ui-timepicker-div dl dt{ height: 25px; }
+.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+</style>
+{% endblock %}
+
+
 {% block extJS %}
+
+<script src="{{url_for('.static', filename='js/jquery-ui-timepicker-addon.js')}}" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
-	function addTime(obj){
+	function addTime(obj,d){
+		var from = $("#from_"+d).val();
+		var to = $("#to_"+d).val();
 		
+		if(!from || !to || from>to){
+			alert("Please input the correct time(From,To).");
+			return false;
+		}
+		
+		var html = '<li><div style="display:inline;margin-right:10px;" class="time_span">';
+		html += '<span>' + from + ' - ' + to + '</span>|<a href="#" onclick="removeTime(this)">X</a>';
+		html += '<input type="hidden" name="time_' + d + '" value="' + from + '|' + to +  '"/></div></li>'; 
+		
+		$("#ul_"+d).append(html);
 	}
 	
 	function removeTime(obj){
 		var t = $(obj);
-		$(t.parents(".time_span")[0]).remove();
+		$(t.parents("li")[0]).remove();
 	}
 	
 	$(document).ready(function(){
-			
+		
+		$(".time").timepicker({
+			timeOnlyTitle: 'Working Time',
+			stepMinute : 30
+		});
+		
+		
 		$("form").submit(function(){
 			var msg = [];
 			if(!$("#email").val()){
@@ -123,16 +155,23 @@
 	    	<div>
 				{%for day in ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY","HOLIDAY"]%}
 					<div>
-						<span>{{day}}</span><input type="button" value="+" ref="{{day}}" onclick="addTime(this)"/>
-						<div>
+						<span>{{day}}</span>
+						<br />
+						<label for="from_{{day}}">From</label><input type="text" name="from_{{day}}" class="time" id="from_{{day}}"/>
+						<label for="to_{{day}}">To</label><input type="text" name="to_{{day}}" class="time" id="to_{{day}}"/>
+						<input type="button" value="+" ref="{{day}}" onclick="addTime(this,'{{day}}')"/>
+						
+						<ul id="ul_{{day}}">
 							{%for (begin_time,end_time) in info['worktime_setting'][day]%}
-								<div style="display:inline;margin-right:10px;" class="time_span">
-									<span>{{begin_time}} - {{end_time}}</span>|<a href="#" onclick="removeTime(this)">X</a>
-									<input type="hidden" name="begin_time_{{day}}" value="begin_time"/>
-									<input type="hidden" name="end_time_{{day}}" value="end_time"/>
-								</div>
+								<li>
+									<div style="display:inline;margin-right:10px;" class="time_span">
+										<span>{{begin_time}} - {{end_time}}</span>|<a href="#" onclick="removeTime(this)">X</a>
+										<input type="hidden" name="time_{{day}}" value="{{'|'.join([begin_time,end_time])}}"/>
+									</div>
+								</li>
 							{%endfor%}
-						</div>
+						</ul>
+
 					</div>
 					<br />
 				{%endfor%}
@@ -140,14 +179,7 @@
 	    </td>
 	    <td>&nbsp;</td>
       </tr>
-	  <tr>
-	    <td>&nbsp;</td>
-	    <td align="right" class="input_left_title"><label for="qty" class="label">Schedule</label></td>
-	    <td><span class="field">Book
-            <input type="text" name="qty" id="qty" value="{{doctor.qty}}"/>
-persons per day</span></td>
-	    <td>&nbsp;</td>
-      </tr>
+
 	  <tr>
 	    <td>&nbsp;</td>
 	    <td align="right" class="input_left_title"><label for="category" class="label">Category</label></td>

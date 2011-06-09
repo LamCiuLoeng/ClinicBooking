@@ -98,14 +98,14 @@ class DoctorProfile(Abstract):
 #        'avaiable_day' : [int],
         'qty' : int,
         'worktime_setting' : {
-                              "MONDAY" : [(unicode, unicode), ],
-                              "TUESDAY" : [(unicode, unicode), ],
-                              "WEDNESDAY" : [(unicode, unicode), ],
-                              "THURSDAY" : [(unicode, unicode), ],
-                              "FRIDAY" : [(unicode, unicode), ],
-                              "SATURDAY" : [(unicode, unicode), ],
-                              "SUNDAY" : [(unicode, unicode), ],
-                              "HOLIDAY" : [(unicode, unicode), ],
+                              "MONDAY" : [[unicode, unicode], ],
+                              "TUESDAY" : [[unicode, unicode], ],
+                              "WEDNESDAY" : [[unicode, unicode], ],
+                              "THURSDAY" : [[unicode, unicode], ],
+                              "FRIDAY" : [[unicode, unicode], ],
+                              "SATURDAY" : [[unicode, unicode], ],
+                              "SUNDAY" : [[unicode, unicode], ],
+                              "HOLIDAY" : [[unicode, unicode], ],
                               "SPECIAL" : [unicode],
                               }
     }
@@ -186,6 +186,7 @@ class Events(Abstract):
         'uid': int,
         'did': int,
         'date' : unicode,
+        'time' : unicode,
         'status' : int,
         'remark':unicode,
     }
