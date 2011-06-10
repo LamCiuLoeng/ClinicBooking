@@ -8,7 +8,7 @@ from mongokit import Document
 from flask import current_app as app
 from sys2do.model import connection, Abstract
 
-__all__ = ['Clinic', 'Category', 'DoctorProfile', 'NurseProfile', 'Events', 'Message', ]
+__all__ = ['Clinic', 'Category', 'DoctorProfile', 'NurseProfile', 'Events', 'Message', 'Holiday' ]
 
 @connection.register
 class Clinic(Abstract):
@@ -191,7 +191,7 @@ class Events(Abstract):
         'remark':unicode,
     }
 
-    equired_fields = ['uid', 'did', 'start', 'end']
+    equired_fields = ['uid', 'did', 'date', 'time']
     default_values = {
                       'create_time':datetime.datetime.now(),
                       'status' : 0 #0 is new ,1 is confirmed , 2 is cancel
@@ -211,6 +211,9 @@ class Events(Abstract):
                 1 : "CONFIRMED",
                 2 : "CANCEL"
                 }[self.status]
+
+
+
 
 @connection.register
 class Message(Abstract):
@@ -239,5 +242,38 @@ class Message(Abstract):
     use_autorefs = True
     def __repr__(self):
         return self.subject
+
+
+@connection.register
+class Holiday(Abstract):
+    __collection__ = 'HOLIDAY'
+    structure = {
+        'id': int,
+        'year': int,
+        'month' : int,
+        'day'   : int,
+        'region' : unicode,
+    }
+
+    equired_fields = ['year', 'month', 'day', 'region']
+    default_values = {
+                      'region' : u'HK'
+                     }
+    use_dot_notation = True
+    use_autorefs = True
+    def __repr__(self):
+        return "%d%2d%2d" % (self.year, self.month, self.day)
+
+    @classmethod
+    def isHoliday(self, d):
+        if isinstance(d, (str, unicode)):
+            one = connection.Holiday.one({"year" :year, "month" : month, "day" : day})
+            return bool(one)
+        elif isinstance(d, (datetime.datetime, datetime.date)):
+            one = connection.Holiday.one({"year" :d.year, "month" : d.month, "day" : d.day})
+            return bool(one)
+        else:
+            return False
+
 
 

@@ -46,6 +46,19 @@ def init():
 #        obj.save()
         permissions_mapping[p] = obj
 
+
+    #add the HK holiday 
+    for d in ["0101", "0203", "0204", "0205", "0405", "0423", "0425", "0502", "0510",
+              "0606", "0701", "0913", "1001", "1005", "1226", "1227"]:
+        day = connection.Holiday()
+        day.id = day.getID()
+        day.year = 2011
+        day.month = int(d[:2])
+        day.day = int(d[-2:])
+        day.save()
+
+
+
     users = [
              ("aa@aa.com", "Admin", "Lam"),
              ("c1@aa.com", "Clinic Manager 1", "Lam"),
@@ -203,7 +216,7 @@ def init():
                               "FRIDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
                               "SATURDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
                               "SUNDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "HOLIDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "HOLIDAY" : [],
                               "SPECIAL" : [],
                               }
     d1.save()
@@ -221,7 +234,7 @@ def init():
                               "FRIDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
                               "SATURDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
                               "SUNDAY" : [],
-                              "HOLIDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
+                              "HOLIDAY" : [],
                               "SPECIAL" : [],
                               }
     d2.save()

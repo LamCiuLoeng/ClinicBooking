@@ -81,38 +81,37 @@ def schedule():
     for d in calendar.Calendar().itermonthdates(year, month):
         info = {
                 "date" : d,
+                "this_month" : True,
+                "is_booked" : False,
+                "event_time" : None,
+                "holiday" : False,
+                "avaiable" : False,
                 }
         if d.month != month:
             info['this_month'] = False
+            s.append(info)
+            continue
+
+        info['this_month'] = True
+        info['events'] = events[d.strftime("%Y%m%d")] if d.strftime("%Y%m%d") in events else []
+
+        for e in info['events']:
+            if e.uid == session['user_profile']['id']:
+                info['is_booked'] = True
+                info['event_time'] = e.time
+                break
+
+        if d < dt.today().date():
+            info['avaiable'] = False
+        elif d.strftime("%Y%m%d") in dp.worktime_setting["SPECIAL"]:
+            info['avaiable'] = False
+        elif connection.Holiday.isHoliday(d):
+            ws = dp.worktime_setting["HOLIDAY"]
+            info['avaiable'] = len(ws) > 0
+            info['holiday'] = True
         else:
-            info['this_month'] = True
-            info['events'] = events[d.strftime("%Y%m%d")] if d.strftime("%Y%m%d") in events else []
-
-            for e in info['events']:
-                if e.uid == session['user_profile']['id']:
-                    info['is_booked'] = True
-                    app.logger.debug('It booked')
-                    break
-            else:
-                info['is_booked'] = False
-
-
-#            if len(info['events']) >= dp.qty:
-#                info['avaiable'] = False
-#                if len(info['events']) == dp.qty : info['full'] = True
-#            elif d.weekday() not in dp.avaiable_day:
-#                info['avaiable'] = False
-#            elif d < dt.today().date():
-#                info['avaiable'] = False
-#            else:
-#                info['avaiable'] = True
-
-
-            if d < dt.today().date():
-                info['avaiable'] = False
-            else:
-                ws = dp.worktime_setting[days[d.weekday()]]
-                info['avaiable'] = len(ws) > 0
+            ws = dp.worktime_setting[days[d.weekday()]]
+            info['avaiable'] = len(ws) > 0
 
         s.append(info)
     return render_template("/schedule.html", schedule = s, doctor = dp, current = current, pre = pre, next = next)
@@ -195,7 +194,8 @@ def save_events():
 
         return jsonify({
                         "success" : True,
-                        "message" : "Save your request successfully !"
+                        "message" : "Save your request successfully !",
+                        "event_time" : e.time,
                         })
     except:
         app.logger.error(traceback.format_exc())

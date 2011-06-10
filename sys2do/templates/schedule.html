@@ -8,6 +8,11 @@
 		border : 1px solid #CCCCCC;
 		margin-top : 5px;
 	}
+	
+	.booked_u{
+		font-size:10px;
+		margin-left:5px;
+	}
 </style>
 {% endblock %}
 
@@ -86,6 +91,7 @@
 													div.removeClass("cal_enable");
 													div.unbind("click");
 													div.unbind("mouseover");
+													div.append('<br /><u class="booked_u">booked at '+ r.event_time +'</u>');
 													$.pnotify({
 													    pnotify_title: "Notice",
 													    pnotify_text: 'Your request has submit successfully!',
@@ -151,7 +157,11 @@
 						{% if not d['avaiable'] %}
 							<div class="cal_box cal_disable" id="{{div_id}}">{{d['date'].day}}</div>
 						{% elif d['is_booked'] %}
-							<div class="cal_box cal_booked" id="{{div_id}}">{{d['date'].day}}</div>
+							<div class="cal_box cal_booked" id="{{div_id}}">
+								{{d['date'].day}}
+								<br />
+								<u class="booked_u">booked at {{d['event_time']}}</u>
+							</div>
 						{% else%}
 							<div class="cal_box cal_enable" id="{{div_id}}">
 								{{d['date'].day}}
