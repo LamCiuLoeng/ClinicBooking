@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>IEASYBOOK</title>
+<style type="text/css">
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000;
+}
+body {
+	background-image: url(/static/images/login_01.jpg);
+	background-repeat: repeat-x;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #152652;
+}
+</style>
+
+<script src="{{url_for('.static', filename='js/jquery-1.6.min.js')}}" type="text/javascript"></script>	
+<script language="JavaScript" type="text/javascript">
+    //<![CDATA[
+    	$(document).ready(function(){
+          var msg = [];
+          {% for category,message in get_flashed_messages(with_categories=true) %}					
+		      msg.push("{{message}}");			
+          {% endfor %}
+          if(msg.length > 0){
+          	alert(msg.join("\n"));
+          }
+    	});
+    //]]>
+   </script>
+
+
+</head>
+
+<body>
+
+<form action="/login_handler" method="post">
+{% if request.values.get("next", None) %}
+	<input type="hidden" name="next" value="{{request.values['next']}}"/>
+{% endif %}
+<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="680" align="left" valign="top" style="background:url(/static/images/login_03.jpg)"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="202">&nbsp;</td>
+        <td height="88">&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+        <td align="left"><img src="/static/images/login_05.jpg" width="560" height="88" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td align="left"><img src="/static/images/login_07.jpg" width="131" height="26" /></td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+        <td align="left"><table width="560" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="252" align="center" valign="top" style="background:url(/static/images/login_09.jpg)"><table width="400" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td height="25" align="left" valign="top">&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="left" valign="top"><img src="/static/images/login_11.jpg" width="177" height="49" /></td>
+              </tr>
+              <tr>
+                <td height="25" align="left" valign="top">&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="left" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td width="150">&nbsp;</td>
+                    <td width="80"><img src="/static/images/login_15.jpg" width="63" height="17" /></td>
+                    <td><input name="email" type="text" id="textfield" size="18" /></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td><img src="/static/images/login_17.jpg" width="63" height="17" /></td>
+                    <td><input name="password" type="password" id="textfield2" size="18" /></td>
+                  </tr>
+                </table></td>
+              </tr>
+              <tr>
+                <td height="25" align="left" valign="top">&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="left" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td width="100"><input type="image" src="/static/images/login_20.jpg" width="62" height="22"/></td>
+                    <td width="120"><a href="/register"><img src="/static/images/login_20-05.jpg" width="62" height="22" /></a></td>
+                  </tr>
+                </table></td>
+              </tr>
+            </table></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><img src="/static/images/login_10.jpg" width="560" height="153" /></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</form>
+
+</body>
+</html>
