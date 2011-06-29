@@ -266,7 +266,7 @@ def trumbnail_save():
     return redirect(url_for("profile"))
 
 
-@has_all_permissions(["ORDER_ADD"])
-@templated("index.html")
+
+@templated("test.html")
 def test():
     return {}

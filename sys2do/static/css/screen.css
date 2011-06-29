@@ -1,13 +1,27 @@
 body{
+	/*
 	background-color: #152652;
     background-image: url("/static/images/login_01.jpg");
     background-repeat: repeat-x;
+    */
     margin: 0;
+    background-image: url("/static/images/bg.jpg");
+    background-repeat : repeat-x;
 }	
 .outter{
-	border : 1px solid gray;
-	overflow : auto;
 	background-color: #fff;
+	overflow : auto;
+	margin-top : 7px !important;
+	margin-bottom : 0px !important;
+	/*
+	border : 1px solid gray;
+	*/
+}
+
+.height_700{
+	height: auto !important;
+	min-height : 700px;
+	height:700px;
 }
 
 .height_600{
@@ -47,13 +61,69 @@ body{
 	
 }
 
-.footer_p{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:16px;
-	font-weight:bold;
-	color:#FFF;
-	margin:5px 0px 5px 0px;
+#header{
+	margin:0px;
+	width:960px;
+	height:200px;
+	background-image:url(/static/images/header_bg.jpg);
 }
+
+#welcome_div{
+	display:inline;
+	margin-right:100px;
+	text-align:center;
+	/*background:#0787A4;*/
+	width:300px;
+	float:right;
+	height:30px;
+	border-radius : 0px 0px 10px 10px;
+	background-image:url(/static/images/welcome_bg.jpg);
+	background-repeat : no-repeat;
+}
+
+#main_content{
+	background-color:#173152;
+	margin:20px 0px 0px 0px;
+	width:960px;
+	background-image:url(/static/images/main_bg.jpg);
+	background-repeat:repeat-x;
+	border-radius : 20px 20px 0px 0px;
+}
+
+#footer{
+	background:#173152;
+	margin:0px;
+	width:960px;
+	text-align:center;
+}
+
+
+/*- Menu Tabs--------------------------- */
+#menu{
+	display:inline;
+	margin-right : 50px;
+	float : right;
+	width : 800px;
+	text-align : right;
+}
+#menu a{
+	font-family : Arial,Helvetica,sans-serif;
+	font-size : 14px;
+	font-weight : bold;
+	padding : 0px 4px 0px 4px;
+	color : #034D6F;
+}
+
+#menu a:hover{
+	color:#690;
+}
+
+#search_div{
+	margin : auto;
+	width : 250px;
+	margin-top : 50px;
+}
+
 .clinic_div{
 	background-color:#FFC;
 }
@@ -79,64 +149,6 @@ a.login_top:active{
 }
 /*--------------------jerry.yu----------------------*/
 
-/*- Menu Tabs--------------------------- */
-#tabs {
-	height:50px;
-  float:left;
-  width:100%;
-  background:#1074b0;
-  font-size:14px;
-  line-height:normal;
-}
-
-
-#tabs ul {
-    margin:0;
-    padding:10px 10px 0 10px;
-    list-style:none;
-}
-
-#tabs li {
-  display:inline;
-  margin:0;
-  padding:0;
-  font-family:Arial, Helvetica, sans-serif;
-  font-size:12px;
-  font-weight:bold;
-  }
-#tabs a {
-  float:left;
-  background:url("/static/images/tableft.gif") no-repeat left top;
-  margin:0;
-  padding:0 0 0 4px;
-  text-decoration:none;
-  }
-#tabs a span {
-  float:left;
-  display:block;
-  background:url("/static/images/tabright.gif") no-repeat right top;
-  padding:5px 15px 4px 6px;
-  color:#666;
-}
-/* Commented Backslash Hack hides rule from IE5-Mac \*/
-#tabs a span {float:none;}
-/* End IE5-Mac hack */
-#tabs a:hover span {
-  color:#FF9834;
-}
-#tabs a:hover {
-  background-position:0% -42px;
-}
-#tabs a:hover span {
-  background-position:100% -42px;
-}
-
-#tabs #current a {
-        background-position:0% -42px;
-}
-#tabs #current a span {
-        background-position:100% -42px;
-}
 
 
 
@@ -180,4 +192,15 @@ a.login_top:active{
 	background-color:brown;
 }
 
+
+.btn{
+	background-color : #FFFBC1;
+	color : #61A7CB;
+	font-weight : bold;
+	font-size : 15px;
+	border : 1px solid;
+	padding : 3px;
+	margin-left : 10px;
+	font-weight : Arial,Helvetica,sans-serif;
+}
 
