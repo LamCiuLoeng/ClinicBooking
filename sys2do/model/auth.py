@@ -40,10 +40,10 @@ class User(Abstract):
     use_dot_notation = True
     use_autorefs = True
     def __repr__(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        return '%s%s' % (self.first_name, self.last_name)
 
     def name(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        return '%s%s' % (self.first_name, self.last_name)
 
     def populate(self):
         return {
@@ -53,7 +53,7 @@ class User(Abstract):
                 'last_name' : self.last_name,
                 'image_url' : self.image_url,
                 'phone' : self.phone,
-                'name' : str(self)
+                'name' : unicode(self)
                 }
 
     def getImage(self):

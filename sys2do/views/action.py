@@ -19,8 +19,13 @@ from sys2do.util.decorator import templated, login_required
 @login_required
 @templated("list_clinic.html")
 def list_clinic():
+    try:
+        page = request.values.get("page", 1)
+    except:
+        page = 1
     cs = list(connection.Clinic.find({'active':0}).sort('name'))
-    return {"clinics" :cs}
+    paginate_clinics = Page(cs, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("list_clinic"), page))
+    return {"clinics" :paginate_clinics}
 
 
 @login_required
@@ -214,7 +219,7 @@ def my_booking():
     id = session['user_profile']['id']
 
     events = list(connection.Events.find({'active':0, 'uid':id}).sort("date"))
-    paginate_events = Page(events, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("my_booking"), page))
+    paginate_events = Page(events, page = page, items_per_page = 20, url = lambda page:"%s?page=%d" % (url_for("my_booking"), page))
     return render_template("/my_booking.html", events = paginate_events)
 
 
@@ -228,5 +233,5 @@ def my_message():
     id = session['user_profile']['id']
 
     msgs = list(connection.Message.find({'active':0, 'uid':id}).sort("create_time", pymongo.DESCENDING))
-    paginate_msgs = Page(msgs, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("my_message"), page))
+    paginate_msgs = Page(msgs, page = page, items_per_page = 20, url = lambda page:"%s?page=%d" % (url_for("my_message"), page))
     return render_template("/my_message.html", messages = paginate_msgs)

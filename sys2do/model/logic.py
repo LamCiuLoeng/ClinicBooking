@@ -14,18 +14,31 @@ __all__ = ['Clinic', 'Category', 'DoctorProfile', 'NurseProfile', 'Events', 'Mes
 class Clinic(Abstract):
     __collection__ = 'CLINIC'
     structure = {
+        'code': unicode,
         'name': unicode,
         'location' : (float, float),
         'address':unicode,
         'district':unicode,
         'street':unicode,
+        'tel':unicode,
         'website' : unicode,
         'image_url' : int,
         'desc':unicode,
         'doctors':[int],
         'nurses':[int],
         'category':[int],
-        'admin' : [int]
+        'admin' : [int],
+        'default_worktime_setting' : {
+                              "MONDAY" : [[unicode, unicode], ],
+                              "TUESDAY" : [[unicode, unicode], ],
+                              "WEDNESDAY" : [[unicode, unicode], ],
+                              "THURSDAY" : [[unicode, unicode], ],
+                              "FRIDAY" : [[unicode, unicode], ],
+                              "SATURDAY" : [[unicode, unicode], ],
+                              "SUNDAY" : [[unicode, unicode], ],
+                              "HOLIDAY" : [[unicode, unicode], ],
+                              "SPECIAL" : [unicode],
+                              }
     }
 
     required_fields = ['name']
@@ -152,7 +165,7 @@ class DoctorProfile(Abstract):
 
     @property
     def name(self):
-        return str(connection.User.one({"id" : self.uid}))
+        return unicode(connection.User.one({"id" : self.uid}))
 
 @connection.register
 class NurseProfile(Abstract):

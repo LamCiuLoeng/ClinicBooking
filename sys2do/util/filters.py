@@ -9,7 +9,7 @@ from jinja2.filters import do_default
 #from flask import current_app as app
 #from sys2do import app
 
-__all__ = ['todayBefor', 'formatTime', 'formatDate', 'string2Date', 'ifFalse', 'getByID']
+__all__ = ['todayBefor', 'formatTime', 'formatDate', 'string2Date', 'ifFalse', 'getByID', 'ampm']
 
 
 def todayBefor(d):
@@ -44,3 +44,17 @@ def getByID(id, obj, attr):
     from sys2do.model import connection
     v = getattr(getattr(connection, obj).one({"id" : id}), attr)
     return v() if callable(v) else v
+
+
+def ampm(v):
+    try:
+        h, m = v.split(":")
+        h = int(h)
+        if h < 12 :
+            return "%.2d:%s AM" % (h, m)
+        if h == 24 :
+            return "00:00 AM"
+        else:
+            return "%.2d:%s PM" % (h - 12, m)
+    except:
+        return v

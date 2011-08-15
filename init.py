@@ -4,6 +4,9 @@ from datetime import datetime as dt
 from sys2do.model import connection, MONGODB_DB, Sequence, UploadFile, SystemLog
 import sys2do.model.auth as auth
 import sys2do.model.logic as logic
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 def init():
     db = getattr(connection, MONGODB_DB)
@@ -63,10 +66,6 @@ def init():
              ("aa@aa.com", "Admin", "Lam"),
              ("c1@aa.com", "Clinic Manager 1", "Lam"),
              ("c2@aa.com", "Clinic Manager 2", "Lam"),
-             ("d1@aa.com", "Doctor 1", "Lam"),
-             ("d2@aa.com", "Doctor 2", "Lam"),
-             ("n1@aa.com", "Nurse 1", "Lam"),
-             ("n2@aa.com", "Nurse 2", "Lam"),
              ("u1@aa.com", "User 1", "Lam"),
              ("u2@aa.com", "User 2", "Lam"),
              ("t1@aa.com", "Temp 1", "Lam"),
@@ -104,10 +103,10 @@ def init():
     users_mapping["aa@aa.com"].roles = [roles_mapping["ADMINISTRATOR"].id, ]
     users_mapping["c1@aa.com"].roles = [roles_mapping["CLINIC_MANAGER"].id, ]
     users_mapping["c2@aa.com"].roles = [roles_mapping["CLINIC_MANAGER"].id, ]
-    users_mapping["d1@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
-    users_mapping["d2@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
-    users_mapping["n1@aa.com"].roles = [roles_mapping["NURSE"].id, ]
-    users_mapping["n2@aa.com"].roles = [roles_mapping["NURSE"].id, ]
+#    users_mapping["d1@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
+#    users_mapping["d2@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
+#    users_mapping["n1@aa.com"].roles = [roles_mapping["NURSE"].id, ]
+#    users_mapping["n2@aa.com"].roles = [roles_mapping["NURSE"].id, ]
     users_mapping["u1@aa.com"].roles = [roles_mapping["NORMALUSER"].id, ]
     users_mapping["u2@aa.com"].roles = [roles_mapping["NORMALUSER"].id, ]
     users_mapping["t1@aa.com"].roles = [roles_mapping["TEMPUSER"].id, ]
@@ -134,13 +133,13 @@ def init():
                                            permissions_mapping["ORDER_CANCEL"].id,
                                            permissions_mapping["ORDER_UPDATE"].id,
                                            ]
-    roles_mapping["DOCTOR"].users = [users_mapping["d1@aa.com"].id, users_mapping["d2@aa.com"].id]
+    roles_mapping["DOCTOR"].users = []
     roles_mapping["NURSE"].permissions = [
                                            permissions_mapping["ORDER_VIEW"].id,
                                            permissions_mapping["ORDER_CANCEL"].id,
                                            permissions_mapping["ORDER_UPDATE"].id,
                                           ]
-    roles_mapping["NURSE"].users = [users_mapping["n1@aa.com"].id, users_mapping["n2@aa.com"].id]
+    roles_mapping["NURSE"].users = []
     roles_mapping["NORMALUSER"].permissions = [
                                                permissions_mapping["ORDER_ADD"].id,
                                                permissions_mapping["ORDER_VIEW"].id,
@@ -184,81 +183,89 @@ def init():
     permissions_mapping["NURSER_DELETE"].roles = [roles_mapping["ADMINISTRATOR"].id, roles_mapping["CLINIC_MANAGER"].id ]
 
 
-    clinic = [
-              ("C1 Address", "Clinic 1", "This is C1 Clinic.", (22.396428, 114.1094970)),
-              ("C2 Address", "Clinic 2", "This is C2 Clinic.", (22.396428, 114.0094970)),
-              ("C3 Address", "Clinic 3", "This is C3 Clinic.", (22.296428, 114.0094970)),
-              ("C4 Address", "Clinic 4", "This is C4 Clinic.", (22.286428, 114.1094970)),
-              ("C5 Address", "Clinic 5", "This is C5 Clinic.", (22.284428, 114.1094970)),
-              ]
-    clinic_mapping = {}
-    for address, name, desc, (lat, lng) in clinic:
+    from clinic_list import clinics
+    clinics_mapping = {}
+
+    print "Error row"
+    for row in filter(lambda r : len(r) != 4, clinics):
+        print row
+
+
+    for (code, name, address, tel) in clinics:
         c = connection.Clinic()
         c.id = c.getID()
-        c.address = unicode(address)
+        c.code = unicode(code)
         c.name = unicode(name)
-        c.desc = unicode(desc)
-        c.location = (lat, lng)
+        c.address = unicode(address)
+        c.tel = unicode(tel)
+
+        u = connection.User()
+        u.id = u.getID()
+        u.email = unicode("%sNUR@ieasybooking.com" % code)
+        u.password = u"aa"
+        u.first_name = unicode(code)
+        u.last_name = unicode("Nurse")
+
+        n = connection.NurseProfile()
+        n.id = n.getID()
+        n.uid = u.id
+        n.desc = u"I'm nurse."
+        n.clinic = [c.id]
+
+        c.nurses = [n.id]
+        c.doctors = []
+        roles_mapping["NURSE"].users.append(n.id)
+
+        u.save()
         c.save()
-        clinic_mapping[name] = c
+        n.save()
+
+        clinics_mapping[code] = c
 
 
-    d1 = connection.DoctorProfile()
-    d1.id = d1.getID()
-    d1.uid = users_mapping["d1@aa.com"].id
-    d1.desc = u"I'm temp 1 doctor."
-    d1.clinic = [clinic_mapping["Clinic 1"].id]
-    d1.worktime_setting = {
-                              "MONDAY" : [[u"09:00", u"12:00"], [u"13:00", u"18:00"] ],
-                              "TUESDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "WEDNESDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "THURSDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "FRIDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "SATURDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "SUNDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "HOLIDAY" : [],
-                              "SPECIAL" : [],
-                              }
-    d1.save()
+    from doctors_list import doctors
+    doctors_count = {}
+    default_worktime = {
+                          "MONDAY" : [ ],
+                          "TUESDAY" : [],
+                          "WEDNESDAY" : [],
+                          "THURSDAY" : [],
+                          "FRIDAY" : [],
+                          "SATURDAY" : [],
+                          "SUNDAY" : [],
+                          "HOLIDAY" : [],
+                          "SPECIAL" : [],
+                          }
+    for (code, first_name, last_name, worktime) in doctors:
+        u = connection.User()
+        u.id = u.getID()
 
-    d2 = connection.DoctorProfile()
-    d2.id = d2.getID()
-    d2.uid = users_mapping["d2@aa.com"].id
-    d2.desc = u"I'm temp 2 doctor."
-    d2.clinic = [clinic_mapping["Clinic 2"].id]
-    d2.worktime_setting = {
-                              "MONDAY" : [[u"09:00", u"12:00"], [u"13:00", u"18:00"] ],
-                              "TUESDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "WEDNESDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "THURSDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "FRIDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "SATURDAY" : [[u"09:00", u"18:00"], [u"13:00", u"18:00"] ],
-                              "SUNDAY" : [],
-                              "HOLIDAY" : [],
-                              "SPECIAL" : [],
-                              }
-    d2.save()
+        if code in doctors_count : doctors_count[code] += 1
+        else : doctors_count[code] = 1
 
-    n1 = connection.NurseProfile()
-    n1.id = n1.getID()
-    n1.uid = users_mapping["n1@aa.com"].id
-    n1.desc = u"I'm temp 1 nurse."
-    n1.clinic = [clinic_mapping["Clinic 1"].id]
-    n1.save()
+        u.email = unicode("%sDOC_%d@ieasybooking.com" % (code, doctors_count[code]))
+        u.password = u"aa"
+        u.first_name = unicode(first_name)
+        u.last_name = unicode(last_name)
+        u.roles = [roles_mapping["DOCTOR"].id, ]
+        roles_mapping["DOCTOR"].users.append(u.id)
 
-    n2 = connection.NurseProfile()
-    n2.id = n1.getID()
-    n2.uid = users_mapping["n2@aa.com"].id
-    n2.desc = u"I'm temp 2 nurse."
-    n2.clinic = [clinic_mapping["Clinic 2"].id]
-    n2.save()
+        tempWorkTime = default_worktime.copy()
+        tempWorkTime.update(worktime)
 
-    clinic_mapping["Clinic 1"].doctors = [d1.id]
-    clinic_mapping["Clinic 1"].nurses = [n1.id]
-    clinic_mapping["Clinic 2"].doctors = [d2.id]
-    clinic_mapping["Clinic 2"].nurses = [n2.id]
+        c = clinics_mapping[code]
+        d = connection.DoctorProfile()
+        d.id = d.getID()
+        d.uid = u.id
+        d.clinic = [c.id]
+        d.worktime_setting = tempWorkTime
+        c.doctors.append(d.id)
+        c.save()
+        u.save()
+        d.save()
 
-    for m in [users_mapping, roles_mapping, permissions_mapping, clinic_mapping]:
+
+    for m in [users_mapping, roles_mapping, permissions_mapping]:
         for k, v in m.items():
             v.save()
 

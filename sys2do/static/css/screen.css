@@ -154,7 +154,7 @@ a.login_top:active{
 
 /*- calendar --------------------------- */
 .cal_header{
-		width:90px;
+	width:90px;
 	height:90px;
 	float:left;
 	margin:0px;
@@ -173,6 +173,11 @@ a.login_top:active{
 	border-bottom:1px solid #369;
 	border-right:1px solid #369;
 }
+
+.cal_first{
+	border-left:1px solid #369;
+}
+
 .cal_disable{
 	background-color:red;
 }

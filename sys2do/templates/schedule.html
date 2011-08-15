@@ -18,7 +18,7 @@
 
 
 {% block extJS %}
-
+<script src="{{url_for('.static', filename='js/custom/util.js')}}" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 
@@ -57,7 +57,7 @@
 						$("#time_spans").html("");
 						for(t in r.time_spans){
 							var time_span = r.time_spans[t];
-							var html = '<div class="time_span"><input type="radio" name="time" value="'+ time_span[0]+'" /><span>'+ time_span[0] + ' ~ ' + time_span[1] +'</span>';
+							var html = '<div class="time_span"><input type="radio" name="time" value="'+ time_span[0]+'" /><span>'+ ampm(time_span[0]) + ' ~ ' + ampm(time_span[1]) +'</span>';
 							
 							for(var i=0;i<time_span[2];i++){
 								html += '<img src="/static/images/jquery_rate/yz2.jpg">';
@@ -130,51 +130,57 @@
 {% endblock %}
 
 {% block content %}
-		<div class="quarter first vpad_10">
-			{% if not profile.image_url%}
-				<img src="/static/images/no_images.jpg"/>
-			{% else %}
-				<img src="{{profile.getImage().url}}"/>
-			{% endif %}
-			<h2>{{profile}}</h2>
-			<p>{{doctor.desc}}</p>
-		</div>
-		
-		
-		<div class="threequarter last vpad_10">
-			<h2 class="text_center">{{current.strftime('%Y.%m')}}</h2>
-			<div style="overflow: auto; width: 650px;">
-				{% for h in ['SUN','MON','TUE','WED','THU','FRI','SAT'] %}
-					<div class="cal_header text_center "><b>{{h}}</b></div>
-				{% endfor %}
-				
-				{% for d in schedule %}
-					{% set div_id = "div_%s" %d['date'].strftime("%Y%m%d") %}
-					
-					{% if not d['this_month'] %}
-						<div class="cal_box cal_not_this_month" id="{{div_id}}">{{d['date'].day}}</div>
+		<div style="padding:10px;background-color:#aaa">
+			<div class="clinic_div" style="padding:10px;">
+				<div class="quarter first vpad_10 text_center">
+					<h2>{{profile}}醫生</h2>
+					{% if not profile.image_url%}
+						<img src="/static/images/no_images.jpg"/>
 					{% else %}
-						{% if not d['avaiable'] %}
-							<div class="cal_box cal_disable" id="{{div_id}}">{{d['date'].day}}</div>
-						{% elif d['is_booked'] %}
-							<div class="cal_box cal_booked" id="{{div_id}}">
-								{{d['date'].day}}
-								<br />
-								<u class="booked_u">booked at {{d['event_time']}}</u>
-							</div>
-						{% else%}
-							<div class="cal_box cal_enable" id="{{div_id}}">
-								{{d['date'].day}}
-								<input type="hidden" name="date" value="{{d['date'].strftime('%Y%m%d')}}"/>
-								<input type="hidden" name="booked" value="{{d['events']|length}}"/>
-							</div>
-						{% endif %}
+						<img src="{{profile.getImage().url}}"/>
 					{% endif %}
-				{% endfor %}
-			</div>
-			<div class="clear"><br /></div>
-			<div class="pagescontainer">
-				<a href="/schedule?id={{doctor.id}}&y={{pre.year}}&m={{pre.month}}">Previously Month</a>&nbsp;|&nbsp;<a href="/schedule?id={{doctor.id}}&y={{next.year}}&m={{next.month}}">Next Month</a>
+					{% if doctor.desc %}
+						<p>{{doctor.desc}}</p>
+					{% endif %}
+				</div>
+			
+			
+				<div class="vpad_10">
+					<h2 class="text_center">{{current.strftime('%Y.%m')}}</h2>
+					<div style="overflow: auto; width: 650px;" class="cal_first">
+						{% for h in ['MON','TUE','WED','THU','FRI','SAT','SUN'] %}
+								<div class="cal_header text_center "><b>{{h}}</b></div>
+						{% endfor %}
+						
+						{% for d in schedule %}
+							{% set div_id = "div_%s" %d['date'].strftime("%Y%m%d") %}
+							
+							{% if not d['this_month'] %}
+								<div class="cal_box cal_not_this_month" id="{{div_id}}">{{d['date'].day}}</div>
+							{% else %}
+								{% if not d['avaiable'] %}
+									<div class="cal_box cal_disable" id="{{div_id}}">{{d['date'].day}}</div>
+								{% elif d['is_booked'] %}
+									<div class="cal_box cal_booked" id="{{div_id}}">
+										{{d['date'].day}}
+										<br />
+										<u class="booked_u">booked at {{d['event_time']|ampm}}</u>
+									</div>
+								{% else%}
+									<div class="cal_box cal_enable" id="{{div_id}}">
+										{{d['date'].day}}
+										<input type="hidden" name="date" value="{{d['date'].strftime('%Y%m%d')}}"/>
+										<input type="hidden" name="booked" value="{{d['events']|length}}"/>
+									</div>
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+					</div>
+					<div class="clear"><br /></div>
+					<div class="pagescontainer">
+						<a href="/schedule?id={{doctor.id}}&y={{pre.year}}&m={{pre.month}}">Previously Month</a>&nbsp;&nbsp;<a href="/schedule?id={{doctor.id}}&y={{next.year}}&m={{next.month}}">Next Month</a>
+					</div>
+				</div>
 			</div>
 		</div>
 		
