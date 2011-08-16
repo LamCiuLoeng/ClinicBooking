@@ -57,20 +57,23 @@
 {% endblock %}
 
 {% block content %}
-<form action="/m_clinic_save" method="post" enctype="multipart/form-data" class="baseform">
-	<input type="hidden" name="type" value="NEW"/>
-	<input type="hidden" name="lat" id="lat" value=""/>
-	<input type="hidden" name="lng" id="lng" value=""/>
+<div class="grey_box">
+	<div class="yellow_box height_600">
+		<form action="/m_clinic_save" method="post" enctype="multipart/form-data" class="baseform">
+			<input type="hidden" name="type" value="NEW"/>
+			<input type="hidden" name="lat" id="lat" value=""/>
+			<input type="hidden" name="lng" id="lng" value=""/>
 	
 
-		<p><label for="name" class="label">Clinic Name</label><input type="text" name="name" id="name" class="field"/></p>
-		<p><label for="website" class="label">Website</label><input type="text" name="website" id="website" class="field"/></p>
-		<p><label for="address" class="label">Address</label><textarea name="address" id="address" class="field"></textarea></p>
-		<p><label for="desc" class="label">Description</label><textarea name="desc" id="desc" class="field"></textarea></p>
-		<p><label for="image_url" class="label">Image</label><input type="file" name="image_url" class="field"/></p>
-		<p><label for="location" class="label">Location</label><div id="gmap" style="width:500px;height:300px;margin-left:200px;"></div></p>
+			<p><label for="name" class="label">Clinic Name</label><input type="text" name="name" id="name" class="field"/></p>
+			<p><label for="website" class="label">Website</label><input type="text" name="website" id="website" class="field"/></p>
+			<p><label for="address" class="label">Address</label><textarea name="address" id="address" class="field"></textarea></p>
+			<p><label for="desc" class="label">Description</label><textarea name="desc" id="desc" class="field"></textarea></p>
+			<p><label for="image_url" class="label">Image</label><input type="file" name="image_url" class="field"/></p>
+			<p><label for="location" class="label">Location</label><div id="gmap" style="width:500px;height:300px;margin-left:200px;"></div></p>
 
-	<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
-</form>
-		
+			<p class="text_right"><input type="submit" value="Save"/>&nbsp;&nbsp;<input type="reset" value="Reset"/></p>
+		</form>
+	</div>
+</div>	
 {% endblock %}

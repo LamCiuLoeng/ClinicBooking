@@ -11,6 +11,7 @@ from sys2do.model import connection
 from sys2do.util.common import MESSAGE_INFO, MESSAGE_ERROR, _g, upload
 from sys2do.util.decorator import login_required, templated, has_all_permissions, has_any_permissions, is_all_roles, is_any_roles
 
+ITEM_PER_PAGE = 20
 
 @has_any_permissions(["CLINIC_VIEW", "CLINIC_VIEW_ALL"])
 @login_required
@@ -21,7 +22,7 @@ def m_clinic_list():
         page = 1
 
     cs = list(connection.Clinic.find({'active':0}).sort('name'))
-    paginate_clinics = Page(cs, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_clinic"), page))
+    paginate_clinics = Page(cs, page = page, items_per_page = ITEM_PER_PAGE, url = lambda page:"%s?page=%d" % (url_for("m_clinic"), page))
     return render_template("m_clinic_list.html", paginate_clinics = paginate_clinics)
 
 
@@ -109,7 +110,7 @@ def m_doctor_list():
         page = 1
 
     ds = list(connection.DoctorProfile.find({'active':0}))
-    paginate_docotrs = Page(ds, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_doctor_list"), page))
+    paginate_docotrs = Page(ds, page = page, items_per_page = ITEM_PER_PAGE, url = lambda page:"%s?page=%d" % (url_for("m_doctor_list"), page))
     return render_template("m_doctor_list.html", paginate_docotrs = paginate_docotrs)
 
 
@@ -265,7 +266,7 @@ def m_nurse_list():
         page = 1
 
     ns = list(connection.NurseProfile.find({'active':0}))
-    paginate_nurses = Page(ns, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_nurse_list"), page))
+    paginate_nurses = Page(ns, page = page, items_per_page = 20, url = lambda page:"%s?page=%d" % (url_for("m_nurse_list"), page))
     return render_template("m_nurse_list.html", paginate_nurses = paginate_nurses)
 
 
@@ -396,7 +397,7 @@ def m_user_list():
 
     r = connection.Role.one({"name" : "NORMALUSER"})
     users = list(connection.User.find({"id":{"$in":r.users}}))
-    paginate_users = Page(users, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_user_list"), page))
+    paginate_users = Page(users, page = page, items_per_page = ITEM_PER_PAGE, url = lambda page:"%s?page=%d" % (url_for("m_user_list"), page))
     return { "paginate_users" : paginate_users}
 
 
@@ -431,7 +432,7 @@ def m_events_list():
     except:
         page = 1
     es = list(connection.Events.find({"active" : 0}).sort("date", pymongo.DESCENDING))
-    paginate_events = Page(es, page = page, items_per_page = 10, url = lambda page:"%s?page=%d" % (url_for("m_events_list"), page))
+    paginate_events = Page(es, page = page, items_per_page = ITEM_PER_PAGE, url = lambda page:"%s?page=%d" % (url_for("m_events_list"), page))
     return {"paginate_events" : paginate_events}
 
 

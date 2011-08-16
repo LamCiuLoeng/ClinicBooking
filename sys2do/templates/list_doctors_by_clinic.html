@@ -25,8 +25,8 @@
 
 
 {% block content %}
-	<div class="bottom_margin_20 blackborder vpad_10" style="padding:10px;background-color:#aaa">
-		<div class="clinic_div" style="padding:10px;">
+	<div class="bottom_margin_20 blackborder vpad_10 grey_box">
+		<div class="yellow_box">
 			<h4>{{clinic.name}}</h4>
 			<div>
 				<img src="/static/images/zstp.jpg" width="300px" height="200px" class="obj_left" style="margin-right:15px; border:#000 solid 1px"  />
@@ -36,12 +36,12 @@
 			{% if clinic.desc %}
 				<p>{{clinic.desc|ifFalse}}</p>
 			{% endif %}
-			<p class="text_left"><a href="/list_clinic">Back to clinic list</a></p>
+			<p class="text_left"><a class="back_a" href="/list_clinic">Back to clinic list</a></p>
 		</div>		
 	</div>
 	{% for d in doctors %}
-		<div class="bottom_margin_20 blackborder vpad_10" style="padding:10px;background-color:#aaa">
-			<div class="clinic_div" style="padding:10px;">
+		<div class="bottom_margin_20 blackborder vpad_10 grey_box">
+			<div class="yellow_box">
 				<h3>{{d['name']}} 醫生</h3>
 				{% set profile = d.getUserProfile() %}
 				<div>				
@@ -55,7 +55,7 @@
 				{% if d['desc']%}
 					<p>{{d['desc']}}</p>
 				{% endif %}
-				<p class="text_right"><a href="/schedule?id={{d.id}}">Check the doctor's schedule</a></p>
+				<p class="text_right"><a class="next_a" href="/schedule?id={{d.id}}">Check the doctor's schedule</a></p>
 			</div>
 		</div>
 	{% endfor %}	

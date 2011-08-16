@@ -130,8 +130,8 @@
 {% endblock %}
 
 {% block content %}
-		<div style="padding:10px;background-color:#aaa">
-			<div class="clinic_div" style="padding:10px;">
+		<div class="grey_box">
+			<div class="yellow_box">
 				<div class="quarter first vpad_10 text_center">
 					<h2>{{profile}}醫生</h2>
 					{% if not profile.image_url%}
@@ -181,6 +181,8 @@
 						<a href="/schedule?id={{doctor.id}}&y={{pre.year}}&m={{pre.month}}">Previously Month</a>&nbsp;&nbsp;<a href="/schedule?id={{doctor.id}}&y={{next.year}}&m={{next.month}}">Next Month</a>
 					</div>
 				</div>
+				
+				<p><a class="back_a" href="{{request.referrer}}">Back to the clinic</a></p>
 			</div>
 		</div>
 		

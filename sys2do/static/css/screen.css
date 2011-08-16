@@ -124,9 +124,12 @@ body{
 	margin-top : 50px;
 }
 
+/*
 .clinic_div{
 	background-color:#FFC;
 }
+*/
+
 .input_left_title{
 	text-align:right;
 	padding:10px 20px 10px 0px;
@@ -207,5 +210,39 @@ a.login_top:active{
 	padding : 3px;
 	margin-left : 10px;
 	font-weight : Arial,Helvetica,sans-serif;
+}
+
+.next_a{
+	background-image : url('/static/images/next.png');
+	background-repeat : no-repeat;
+	padding-left : 18px;
+	font-weight : bold;
+	font-size : 16px;
+}
+
+.back_a{
+	background-image : url('/static/images/back.png');
+	background-repeat : no-repeat;
+	padding-left : 18px;
+	font-weight : bold;
+	font-size : 16px;
+}
+
+.add_a{
+	background-image : url('/static/images/add.png');
+	background-repeat : no-repeat;
+	padding-left : 18px;
+	font-weight : bold;
+	font-size : 16px;
+}
+
+.grey_box{
+	padding:10px;
+	background-color:#aaa;
+}
+
+.yellow_box{
+	padding:10px;
+	background-color : #FFFFCC;
 }
 

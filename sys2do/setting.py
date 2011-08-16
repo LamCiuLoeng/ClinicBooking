@@ -15,8 +15,9 @@ USE_X_SENDFILE = False
 SERVER_NAME = None
 MAX_CONTENT_LENGTH = None
 TESTING = False
-PERMANENT_SESSION_LIFETIME = datetime.timedelta(31)
+PERMANENT_SESSION_LIFETIME = datetime.timedelta(days = 31)
 SESSION_COOKIE_NAME = 'session'
+
 
 
 #config for logging

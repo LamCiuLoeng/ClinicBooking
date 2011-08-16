@@ -31,8 +31,8 @@
 {% block content %}
 
 	{% for c in clinics.items %}
-		<div class="bottom_margin_20 blackborder " style="padding:10px;background-color:#aaa">
-			<div class="clinic_div" style="padding:10px;">
+		<div class="bottom_margin_20 blackborder grey_box">
+			<div class="yellow_box">
 				<h4>{{c.name}}</h4>
 				<div>
 		        	<img src="/static/images/zstp.jpg" width="300px" class="obj_left" height="200px" style="margin-right:15px; border:#000 solid 1px"  />
@@ -42,7 +42,7 @@
 				{% if c.desc %}
 					<p>{{c.desc}}</p>
 				{% endif %}
-				<p class="text_right"><a href="/list_doctors_by_clinic?id={{c.id}}">Check the doctors</a></p>
+				<p class="text_right"><a class="next_a" href="/list_doctors_by_clinic?id={{c.id}}">Check the doctors</a></p>
 			</div>
 		</div>
 	{% endfor %}
