@@ -59,8 +59,12 @@
 							var time_span = r.time_spans[t];
 							var html = '<div class="time_span"><input type="radio" name="time" value="'+ time_span[0]+'" /><span>'+ ampm(time_span[0]) + ' ~ ' + ampm(time_span[1]) +'</span>';
 							
-							for(var i=0;i<time_span[2];i++){
-								html += '<img src="/static/images/jquery_rate/yz2.jpg">';
+							for(var i=0;i<time_span[3];i++){
+								html += '<img class="occupied" src="/static/images/jquery_rate/yz2.jpg">';
+							}
+							
+							for(var i=0;i<time_span[2] - time_span[3];i++){
+								html += '<img class="available" src="/static/images/jquery_rate/yz1.jpg">';
 							}
 							
 							html += '</div>';
@@ -76,6 +80,12 @@
 									Save : function(){
 										var div = current_div;
 										var date = $("input[name='date']",div).val();
+										
+										if($(".available").length < 1){
+											alert('The schedule for the doctor this day is full.');
+											return;
+										}
+										
 										$.getJSON("/save_events",
 											{
 												"did" : {{doctor.id}},

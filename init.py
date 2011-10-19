@@ -103,10 +103,6 @@ def init():
     users_mapping["aa@aa.com"].roles = [roles_mapping["ADMINISTRATOR"].id, ]
     users_mapping["c1@aa.com"].roles = [roles_mapping["CLINIC_MANAGER"].id, ]
     users_mapping["c2@aa.com"].roles = [roles_mapping["CLINIC_MANAGER"].id, ]
-#    users_mapping["d1@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
-#    users_mapping["d2@aa.com"].roles = [roles_mapping["DOCTOR"].id, ]
-#    users_mapping["n1@aa.com"].roles = [roles_mapping["NURSE"].id, ]
-#    users_mapping["n2@aa.com"].roles = [roles_mapping["NURSE"].id, ]
     users_mapping["u1@aa.com"].roles = [roles_mapping["NORMALUSER"].id, ]
     users_mapping["u2@aa.com"].roles = [roles_mapping["NORMALUSER"].id, ]
     users_mapping["t1@aa.com"].roles = [roles_mapping["TEMPUSER"].id, ]
@@ -186,11 +182,6 @@ def init():
     from clinic_list import clinics
     clinics_mapping = {}
 
-    print "Error row"
-    for row in filter(lambda r : len(r) != 4, clinics):
-        print row
-
-
     for (code, name, address, tel) in clinics:
         c = connection.Clinic()
         c.id = c.getID()
@@ -252,7 +243,8 @@ def init():
 
         tempWorkTime = default_worktime.copy()
         tempWorkTime.update(worktime)
-
+        for k, v in tempWorkTime.items():
+            tempWorkTime[k] = map(lambda o:{"times" : o, "seats" : 4}, v)
         c = clinics_mapping[code]
         d = connection.DoctorProfile()
         d.id = d.getID()

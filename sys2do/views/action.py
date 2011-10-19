@@ -135,26 +135,32 @@ def get_date_info():
 
     day = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"][require_date.weekday()]
     time_spans = {}
-    for [begin, end] in doctor.worktime_setting[day]:
+    for setting in doctor.worktime_setting[day]:
+        begin, end = setting['times']
+
+        app.logger.info(setting)
         bHour, bEnd = begin.split(":")
         eHour, eEnd = end.split(":")
 
         if bHour == eHour:
-            time_spans[bHour] = [begin, end, 0]
+            time_spans[bHour] = [begin, end, setting['seats'], 0]
         else:
             h1 = int(bHour)
             h2 = int(eHour)
             for h in range(h1 + 1, h2):
-                time_spans[h] = [("0%d:00" % h)[-5:], ("0%d:00" % (h + 1))[-5:], 0]
+                time_spans[h] = [("0%d:00" % h)[-5:], ("0%d:00" % (h + 1))[-5:], 0, 0]
             if eEnd != "00":
-                time_spans[h2] = [("0%d:00" % h2)[-5:], end, 0]
-            time_spans[h1] = [begin, ("0%d:00" % (h1 + 1))[-5:], 0]
+                time_spans[h2] = [("0%d:00" % h2)[-5:], end, 0, 0]
+            time_spans[h1] = [begin, ("0%d:00" % (h1 + 1))[-5:], 0, 0]
+
+            spans = sorted(time_spans.keys())
+            for i in range(setting['seats']) : time_spans[spans[i % len(spans)]][2] += 1
 
 
     for e in connection.Events.find({"active":0, "did" : int(pdoctor), "date" : pdate}):
         h, m = e.time.split(":")
         if int(h) in time_spans:
-            time_spans[int(h)][2] += 1
+            time_spans[int(h)][3] += 1
 
     return jsonify({
                     "success" : True,
